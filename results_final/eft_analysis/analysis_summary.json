@@ -1,0 +1,40 @@
+{
+  "parameters": {
+    "n_nodes": 64,
+    "alpha": 0.05,
+    "mu": 0.1,
+    "tau": 1.0,
+    "field_amplitude": 1.0
+  },
+  "analysis_type": "full",
+  "results": {
+    "parameters": {
+      "analysis_type": "full",
+      "n_nodes": 64,
+      "alpha": 0.05,
+      "mu": 0.1,
+      "tau": 1.0,
+      "field_amplitude": 1.0,
+      "mu_range": null,
+      "tau_range": null,
+      "output_dir": "results_final",
+      "save_plots": true
+    },
+    "eft_analysis": {
+      "eft_coefficients": {
+        "einstein_hilbert": 0.019894367886486918,
+        "ricci_squared": 0.0006332573977646111,
+        "riemann_squared": 6.332573977646111e-05,
+        "box_ricci": -7.957747154594768e-05,
+        "gauss_bonnet": 1e-06,
+        "weyl_squared": 0.0001,
+        "scalar_curvature_4": 1e-08,
+        "covariant_derivatives": 1e-05,
+        "scalar_curvature_coupling": 0.1,
+        "scalar_quartic_derivative": 0.001
+      },
+      "anec_violation_eft": 9.591004552359379e-05,
+      "background_curvature": 0.1
+    }
+  }
+}

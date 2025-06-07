@@ -1,0 +1,28 @@
+{
+  "parameters": {
+    "n_nodes": 64,
+    "alpha": 0.05,
+    "mu": 0.1,
+    "tau": 1.0,
+    "field_amplitude": 1.0
+  },
+  "analysis_type": "full",
+  "results": {
+    "parameters": {
+      "analysis_type": "full",
+      "n_nodes": 64,
+      "alpha": 0.05,
+      "mu": 0.1,
+      "tau": 1.0,
+      "field_amplitude": 1.0,
+      "mu_range": null,
+      "tau_range": null,
+      "output_dir": "results_full",
+      "save_plots": true
+    },
+    "single_point": {
+      "anec_integral_classical": 0.23595488372805784,
+      "anec_integral_midisuperspace": 0.0,
+      "anec_bound": -0.009498860966469166,
+      "polymer_bound": -0.009343380219869466,
+      "classical_violation": 
