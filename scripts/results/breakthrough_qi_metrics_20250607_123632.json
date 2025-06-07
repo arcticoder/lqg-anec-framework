@@ -1,0 +1,29 @@
+{
+  "total_time": 27.133942365646362,
+  "peak_memory_gb": 1.894261248,
+  "memory_utilization": 23.6782656,
+  "gpu_utilization": 18.952109737504546,
+  "throughput_tops": 0.0004748628752272013,
+  "total_violations": 1560576,
+  "max_violation_rate": 0.9921875,
+  "min_anec_value": -472.7607421875,
+  "fields_analyzed": 3,
+  "enhanced_ghost_results": {
+    "violations": 520192,
+    "max_rate": 0.9921875,
+    "min_anec": -439.97265625,
+    "computation_time": 9.84671664237976
+  },
+  "pure_negative_results": {
+    "violations": 520192,
+    "max_rate": 0.9921875,
+    "min_anec": -464.3556213378906,
+    "computation_time": 8.564254522323608
+  },
+  "week_tachyon_results": {
+    "violations": 520192,
+    "max_rate": 0.9921875,
+    "min_anec": -472.7607421875,
+    "computation_time": 8.71248722076416
+  }
+}

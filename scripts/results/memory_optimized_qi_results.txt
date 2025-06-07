@@ -1,0 +1,27 @@
+Memory-Optimized GPU QI Analysis Results
+=======================================
+GPU: NVIDIA GeForce RTX 2060 SUPER
+Parameter combinations: 400
+Field modes: 450
+Spatial points: 700
+Total tensor elements: 126,000,000
+
+Performance Metrics:
+  Total computation time: 1.02 seconds
+  Peak GPU memory: 2.15 GB
+  Achieved throughput: 0.01 TFLOPS
+  Estimated GPU utilization: 0.1%
+
+QI Analysis Results:
+  QI violations found: 0
+  Violation rate: 0.000%
+
+ANEC Statistics:
+  Mean: 0.00e+00
+  Std: 0.00e+00
+  Range: [0.00e+00, 0.00e+00]
+
+QI Bound Statistics:
+  Mean: inf
+  Std: nan
+  Range: [6.69e+32, inf]

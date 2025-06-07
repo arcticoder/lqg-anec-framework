@@ -1,0 +1,30 @@
+Ultra-High GPU Utilization QI Analysis Results
+==============================================
+GPU: NVIDIA GeForce RTX 2060 SUPER
+Parameter combinations: 1,000
+Field modes: 500
+Spatial points: 400
+Total tensor elements: 200,000,000
+CUDA streams used: 8
+
+Performance Metrics:
+  Total computation time: 1.61 seconds
+  Peak GPU memory: 2.51 GB
+  Memory utilization: 29.2%
+  Achieved throughput: 0.03 TFLOPS
+  Compute utilization: 0.4%
+  Overall GPU utilization: 9.0%
+
+QI Analysis Results:
+  QI violations found: 0
+  Violation rate: 0.000%
+
+ANEC Statistics:
+  Mean: 0.00e+00
+  Std: 0.00e+00
+  Range: [0.00e+00, 0.00e+00]
+
+QI Bound Statistics:
+  Mean: 9.51e+17
+  Std: 2.01e+15
+  Range: [9.50e+17, 9.59e+17]

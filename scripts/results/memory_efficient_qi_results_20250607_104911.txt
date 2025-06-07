@@ -1,0 +1,1 @@
+MEMORY-EFFICIENT GPU QI ANALYSIS RESULTS\n=========================================\n\nTotal samples: 10,000\nTotal time: 25.99 seconds\nQI violation rate: 0.000000 (0.0000%)\n\nTarget: Week-long 10^-25 W negative energy flux\nMethod: Chunked GPU processing with memory optimization\n
