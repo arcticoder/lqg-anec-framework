@@ -13,6 +13,7 @@ import os
 import json
 import numpy as np
 from pathlib import Path
+import subprocess
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -218,12 +219,17 @@ Examples:
   
   # EFT analysis only
   python run_lqg_anec_analysis.py --analysis-type eft --n-nodes 64
+  
+  # Coherent state pipeline test
+  python run_lqg_anec_analysis.py --analysis-type coherent-test
+  
+  # Quantum inequality bound comparison
+  python run_lqg_anec_analysis.py --analysis-type qi-comparison
 """
     )
-    
-    # Analysis type
+      # Analysis type
     parser.add_argument('--analysis-type', type=str, default='single',
-                       choices=['single', 'scan', 'eft', 'warp', 'full'],
+                       choices=['single', 'scan', 'eft', 'warp', 'full', 'coherent-test', 'qi-comparison'],
                        help='Type of analysis to perform')
     
     # Physical parameters

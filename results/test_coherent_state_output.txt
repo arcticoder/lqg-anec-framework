@@ -1,0 +1,12 @@
+
+Traceback (most recent call last):
+Error during test: 'charmap' codec can't encode character '\u2192' in position 19: character maps to <undefined>
+  File "C:\Users\echo_\Code\asciimath\lqg-anec-framework\scripts\test_coherent_state.py", line 119, in <module>
+    results = main()
+              ^^^^^^
+  File "C:\Users\echo_\Code\asciimath\lqg-anec-framework\scripts\test_coherent_state.py", line 26, in main
+    print("=== Coherent State \u2192 <T\u2080\u2080> Pipeline Test ===\n")
+  File "C:\Users\echo_\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 19: character maps to <undefined>
