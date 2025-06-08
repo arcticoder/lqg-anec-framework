@@ -20,6 +20,10 @@ try:
     from .midisuperspace_model import MidiSuperspaceModel
     from .polymer_quantization import polymer_correction, PolymerOperator
     from .anec_violation_analysis import coherent_state_anec_violation
+    from .vacuum_engineering import (
+        CasimirArray, DynamicCasimirEffect, SqueezedVacuumResonator,
+        MetamaterialCasimir, comprehensive_vacuum_analysis
+    )
     
     __all__ = [
         'CoherentState',
@@ -31,7 +35,12 @@ try:
         'MidiSuperspaceModel',
         'polymer_correction',
         'PolymerOperator',
-        'coherent_state_anec_violation'
+        'coherent_state_anec_violation',
+        'CasimirArray',
+        'DynamicCasimirEffect', 
+        'SqueezedVacuumResonator',
+        'MetamaterialCasimir',
+        'comprehensive_vacuum_analysis'
     ]
     
 except ImportError as e:
