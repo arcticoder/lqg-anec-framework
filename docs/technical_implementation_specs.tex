@@ -78,6 +78,212 @@ Critical UV cutoff for numerical stability:
 
 This prevents divergences while preserving physical behavior up to Planck scale.
 
+\section{Vacuum Engineering Technical Specifications}
+
+\subsection{Laboratory-Source Implementation}
+
+The vacuum engineering module provides four distinct negative energy generation mechanisms with comprehensive technical specifications for laboratory implementation.
+
+\textbf{Core API Structure:}
+\begin{lstlisting}[language=Python]
+class VacuumEnergySource:
+    """Base class for all vacuum engineering sources."""
+    
+    def total_density(self) -> float:
+        """Return total energy density in J/m³."""
+        pass
+    
+    def to_dict(self) -> dict:
+        """Serialize source configuration for analysis."""
+        pass
+\end{lstlisting}
+
+\subsection{Casimir Array Technical Specifications}
+
+\textbf{Multi-Layer Casimir Cavity Implementation:}
+\begin{equation}
+P_{\text{Casimir}} = -\frac{\pi^2 \hbar c}{240 a^4} \times \prod_{i=1}^N \epsilon_i^{\text{eff}} \times f_{\text{thermal}}(T)
+\end{equation}
+
+\textbf{Implementation Parameters:}
+\begin{itemize}
+    \item \textbf{Optimal spacing}: 5-10 nm (achievable with EUV lithography)
+    \item \textbf{Layer count}: 100-200 layers for maximum enhancement
+    \item \textbf{Material sequence}: Au/SiO₂ alternating with metamaterial caps
+    \item \textbf{Thermal correction}: $f_{\text{thermal}}(T) = 1 + \frac{k_B T a}{\hbar c}$ for $T < 300$ K
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+class CasimirArray:
+    def __init__(self, num_layers=100, spacing_nm=10.0, 
+                 materials=['Au', 'SiO2'], 
+                 length_mm=1.0, width_mm=1.0, temperature_K=300):
+        
+        # Enhanced pressure calculation
+        self.casimir_pressure = self._compute_enhanced_pressure()
+        self.volume = length_mm * width_mm * (spacing_nm * num_layers) * 1e-12
+        
+    def _compute_enhanced_pressure(self):
+        """Compute multi-layer enhanced Casimir pressure."""
+        base_pressure = -np.pi**2 * hbar * c / (240 * self.spacing**4)
+        
+        # Material enhancement factors
+        enhancement = 1.0
+        for material in self.materials:
+            eps_eff = MATERIAL_DATABASE[material]['dielectric']
+            enhancement *= eps_eff
+        
+        # Multi-layer amplification
+        layer_factor = self.num_layers**1.5  # Sublinear scaling
+        
+        return base_pressure * enhancement * layer_factor
+\end{lstlisting}
+
+\subsection{Dynamic Casimir Effect Specifications}
+
+\textbf{Circuit-Based Implementation:}
+\begin{equation}
+\rho_{\text{dynamic}} = -\frac{\hbar \omega_{\text{drive}}}{c^3} \Delta^2 Q \times \text{resonance factor}
+\end{equation}
+
+\textbf{Optimal Operating Parameters:}
+\begin{itemize}
+    \item \textbf{Circuit frequency}: 1-10 GHz (superconducting circuits)
+    \item \textbf{Drive frequency}: $2 \times f_{\text{circuit}}$ for maximum photon creation
+    \item \textbf{Quality factor}: $Q > 10^4$ (achievable in current devices)
+    \item \textbf{Modulation depth}: $\Delta = 0.1-0.3$ (controlled by SQUID bias)
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+class DynamicCasimirEffect:
+    def __init__(self, circuit_freq_ghz=5.0, quality_factor=1e4,
+                 modulation_depth=0.2, volume_um3=1000):
+        
+        # Optimal drive frequency for photon creation
+        self.drive_freq = 2.0 * circuit_freq_ghz * 1e9  # Hz
+        
+        # Resonance enhancement at 2x circuit frequency
+        self.resonance_factor = self._compute_resonance_enhancement()
+        
+    def _compute_resonance_enhancement(self):
+        """Compute dynamic Casimir resonance enhancement."""
+        # Maximum enhancement at 2x circuit frequency
+        freq_ratio = self.drive_freq / (2.0 * self.circuit_freq)
+        resonance = 1.0 / (1.0 + (freq_ratio - 1.0)**2 * self.quality_factor)
+        
+        return resonance * self.modulation_depth**2
+\end{lstlisting}
+
+\subsection{Squeezed Vacuum Resonator Specifications}
+
+\textbf{Fiber-Coupled Implementation:}
+\begin{equation}
+\rho_{\text{squeezed}} = -\frac{\hbar \omega}{V} (\sinh^2(\xi) + \xi \cosh(\xi)\sinh(\xi))
+\end{equation}
+
+\textbf{Optimization Parameters:}
+\begin{itemize}
+    \item \textbf{Squeezing parameter}: $\xi = 0.5-3.0$ (validated range)
+    \item \textbf{Frequency range}: THz-optical (1-100 THz)
+    \item \textbf{Fiber geometry}: Single-mode fibers with $\sim 10$ μm core
+    \item \textbf{Stabilization}: Active feedback at MHz bandwidths
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+class SqueezedVacuumResonator:
+    def __init__(self, frequency_thz=10.0, squeezing_parameter=1.5,
+                 fiber_length_mm=10.0, core_diameter_um=10.0):
+        
+        # Optimal squeezing for negative energy
+        self.optimal_xi = self._optimize_squeezing_parameter()
+        
+        # Fiber volume calculation
+        core_area = np.pi * (core_diameter_um * 1e-6 / 2)**2
+        self.volume = core_area * fiber_length_mm * 1e-3
+        
+    def _optimize_squeezing_parameter(self):
+        """Find optimal squeezing for maximum negative energy."""
+        xi_vals = np.linspace(0.5, 3.0, 100)
+        densities = []
+        
+        for xi in xi_vals:
+            # Squeezed energy density
+            squeeze_term = np.sinh(xi)**2 + xi * np.cosh(xi) * np.sinh(xi)
+            density = -hbar * self.frequency * squeeze_term / self.volume
+            densities.append(density)
+        
+        return xi_vals[np.argmin(densities)]  # Most negative
+\end{lstlisting}
+
+\subsection{Metamaterial Enhancement Implementation}
+
+\textbf{Negative-Index Material Enhancement:}
+\begin{equation}
+P_{\text{meta}} = P_{\text{Casimir}} \times |n_{\text{eff}}|^4 \times \text{geometry factor}
+\end{equation}
+
+\textbf{Design Specifications:}
+\begin{itemize}
+    \item \textbf{Unit cell size}: 50-100 nm (current lithography limits)
+    \item \textbf{Operating frequency}: THz-optical range
+    \item \textbf{Refractive index}: $n_{\text{eff}} = \sqrt{\epsilon \mu}$ with $\epsilon, \mu < 0$
+    \item \textbf{Enhancement factor}: $|n_{\text{eff}}|^4 \approx 10^2-10^4$
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+class MetamaterialCasimir:
+    def __init__(self, base_casimir, epsilon_r=-2.0, mu_r=-1.5,
+                 unit_cell_nm=75, frequency_thz=50):
+        
+        self.base_source = base_casimir
+        
+        # Effective refractive index for negative-index materials
+        n_eff = np.sqrt(epsilon_r * mu_r)
+        self.enhancement_factor = abs(n_eff)**4
+        
+        # Geometry factor from unit cell design
+        self.geometry_factor = self._compute_geometry_factor()
+        
+    def _compute_geometry_factor(self):
+        """Compute metamaterial geometry enhancement."""
+        # Frequency-dependent enhancement
+        freq_factor = (self.frequency_thz / 50.0)**0.5  # Scaling with frequency
+        
+        # Unit cell size optimization
+        size_factor = (100.0 / self.unit_cell_nm)**0.3  # Smaller cells better
+        
+        return freq_factor * size_factor
+\end{lstlisting}
+
+\subsection{ANEC Integration API}
+
+\textbf{Unified ANEC Flux Conversion:}
+\begin{lstlisting}[language=Python]
+def vacuum_energy_to_anec_flux(energy_source, tau_scale=1e-12, 
+                               beam_area=1e-6, integration_time=1e-6):
+    """Convert vacuum energy density to ANEC violation flux."""
+    
+    # Energy density from source
+    rho = energy_source.total_density()  # J/m³
+    
+    # Volume from source geometry
+    volume = energy_source.get_effective_volume()  # m³
+    
+    # ANEC flux calculation
+    anec_flux = rho * volume / (tau_scale * beam_area * integration_time)
+    
+    # Compare to quantum inequality bound
+    qi_bound = -3.0 / (32 * np.pi**2 * tau_scale**4)
+    enhancement = abs(anec_flux / qi_bound)
+    
+    return {
+        'anec_flux': anec_flux,  # W/m²
+        'qi_enhancement': enhancement,
+        'energy_density': rho,
+        'effective_volume': volume
+    }
+\end{lstlisting}
+
 \section{Computational Implementation}
 
 \subsection{GPU Memory Management}
