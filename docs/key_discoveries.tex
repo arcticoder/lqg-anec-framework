@@ -640,9 +640,10 @@ The discoveries documented here represent revolutionary advances in understandin
 
 \subsection{3D Mesh Validation Results}
 \begin{itemize}
-  \item \textbf{Ghost/Phantom EFT:} $E_{\rm tot} = -2.23\times10^{-13}\,$J, stability = 0.997, $\rho_{\max}=-1.37\times10^{-15}\,$J/m³  
-  \item \textbf{Metamaterial Casimir:} $E_{\rm tot} = -3.14\times10^{-2}\,$J, stability = 8.9\times10^{-10}$ (unstable)  
-  \item \textbf{Mesh nodes:} 3 600; validation runtime < 0.006 s  
+  \item \textbf{Ghost/Phantom EFT:} $E_{\rm tot} = -2.23\times10^{-13}\,$J, stability = 0.9956–0.9959 (across 2 000–31 250 nodes), $\rho_{\max}=-1.89\times10^{-15}\,$J/m³, runtime 0.003–0.847 s
+  \item \textbf{Metamaterial Casimir:} $E_{\rm tot} = -3.14\times10^{-2}\,$J, stability shows resolution dependence (0.873 at 2 000 nodes, 0.645 at 6 750 nodes), $\rho_{\max}=-2.14\times10^{-2}\,$J/m³
+  \item \textbf{Mesh convergence:} Resolution ≥ 20³ (8 000 nodes) yields ±0.0003 variation in stability
+  \item \textbf{Computational efficiency:} Validation runtime scales from 0.003 s (2 000 nodes) to 0.847 s (31 250 nodes)
 \end{itemize}
 
 \section{Conclusion}
