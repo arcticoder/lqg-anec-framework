@@ -18,12 +18,18 @@ Theory Background:
 - UV completion suppresses ghost instabilities at high energy
 """
 
-import torch
-import torch.nn.functional as F
 import numpy as np
-from typing import Dict, List, Tuple, Optional, Union
 import logging
+from typing import Dict, List, Tuple, Optional, Union
 from dataclasses import dataclass
+
+try:
+    import torch
+    import torch.nn.functional as F
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    logging.warning("PyTorch not available - falling back to NumPy operations")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -64,22 +70,46 @@ class GhostCondensateEFT:
     Optimized for GPU computation with vectorized operations.
     """
     
-    def __init__(self, params: GhostEFTParameters):
-        """Initialize ghost condensate EFT system."""
-        self.params = params
-        self.device = torch.device(params.device if torch.cuda.is_available() else "cpu")
+    def __init__(self, M=1e4, alpha=0.5, beta=1e-3, grid=None, params=None, device="cuda"):
+        """
+        Initialize ghost condensate EFT system.
         
-        # Initialize coordinate grids
-        self._setup_coordinates()
-        
-        # Initialize field configuration
-        self._setup_fields()
-        
-        # Precompute derivatives and operators
-        self._setup_operators()
-        
-        logger.info(f"Ghost-condensate EFT initialized on {self.device}")
-        logger.info(f"Grid: {params.grid_size}³, Cutoff: {params.cutoff_scale}")
+        L = -X + alpha*X^2/M^4 - beta*phi^2
+        :param M: mass-scale for X^2 term
+        :param alpha: dimensionless coeff of X^2
+        :param beta: mass^2 term in V(phi)=½β phi^2
+        :param grid: 1D array of positions (for ANEC integration)
+        :param params: GhostEFTParameters object (alternative interface)
+        :param device: computation device
+        """
+        if params is not None:
+            # Use new parameter interface
+            self.params = params
+            self.device = torch.device(params.device if torch.cuda.is_available() else "cpu")
+            self.M = params.cutoff_scale * 1e3  # Convert to mass scale
+            self.alpha = params.lambda_ghost
+            self.beta = params.higher_deriv_coeff
+            
+            # Initialize coordinate grids
+            self._setup_coordinates()
+            # Initialize field configuration
+            self._setup_fields()
+            # Precompute derivatives and operators
+            self._setup_operators()
+            
+            logger.info(f"Ghost-condensate EFT initialized on {self.device}")
+            logger.info(f"Grid: {params.grid_size}³, Cutoff: {params.cutoff_scale}")
+        else:
+            # Use direct parameter interface for scanning
+            self.M = M
+            self.alpha = alpha
+            self.beta = beta
+            self.grid = grid if grid is not None else np.linspace(-1e6, 1e6, 2000)
+            self.device = device
+            self.params = None
+            
+            logger.info(f"Ghost EFT initialized: M={M:.1e}, α={alpha}, β={beta:.1e}")
+            logger.info(f"Grid range: [{self.grid[0]:.1e}, {self.grid[-1]:.1e}] with {len(self.grid)} points")
     
     def _setup_coordinates(self):
         """Setup spacetime coordinate grids."""
@@ -122,6 +152,7 @@ class GhostCondensateEFT:
         self.dphi_dx = None
         self.dphi_dy = None
         self.X_kinetic = None  # Kinetic invariant X = -1/2 (∂φ)²
+        self.field_configuration = None
     
     def _setup_operators(self):
         """Setup differential operators for field equations."""
@@ -173,10 +204,10 @@ class GhostCondensateEFT:
         """
         if self.X_kinetic is None:
             self.compute_field_derivatives()
-        
-        # Base kinetic term
+          # Base kinetic term
         L_kinetic = self.X_kinetic
-          # Ghost self-interaction P(X)
+        
+        # Ghost self-interaction P(X)
         # Use P(X) = λ X^2 for simplicity (quartic self-interaction)
         P_X = self.params.lambda_ghost * self.X_kinetic**2
         
@@ -189,6 +220,106 @@ class GhostCondensateEFT:
         L_uv = self.params.higher_deriv_coeff * phi_laplacian**2 / self.params.cutoff_scale**2
         
         return L_kinetic + P_X + L_uv
+
+    def potential(self, phi):
+        """Ghost scalar potential V(φ) = ½β φ²"""
+        if hasattr(self, 'params') and self.params is not None:
+            return 0.5 * self.params.higher_deriv_coeff * phi**2
+        else:
+            return 0.5 * self.beta * phi**2
+
+    def lagrangian(self, phi, dphi):
+        """Ghost condensate Lagrangian: L = -X + α X²/M⁴ - V(φ)"""
+        X = 0.5 * dphi**2
+        kinetic_term = -X
+        interaction_term = self.alpha * (X**2) / (self.M**4)
+        potential_term = -self.potential(phi)
+        return kinetic_term + interaction_term + potential_term
+
+    def stress_uu(self, phi, dphi):
+        """Compute T_uu = T_tt + 2T_tx + T_xx for ANEC calculation"""
+        X = 0.5 * dphi**2
+        
+        # T_tt = -X + α X²/M⁴ - V(φ)
+        T_tt = -X + self.alpha * X**2 / (self.M**4) - self.potential(phi)
+        
+        # T_xx = -X + 3α X²/M⁴ + V(φ)  
+        T_xx = -X + 3 * self.alpha * X**2 / (self.M**4) + self.potential(phi)
+          # For null geodesic T_uu = T_tt + T_xx
+        return T_tt + T_xx
+
+    def compute_anec(self, smear_kernel):
+        """
+        Compute ANEC integral for ghost condensate configuration.
+        Build φ(x) = φ₀ exp(-x²/σ²), compute dφ/dx,
+        then smear along x as if it were τ to get ANEC.
+        """
+        # Choose pulse width σ = grid_span/3
+        sigma = (self.grid[-1] - self.grid[0]) / 6
+        
+        # Ghost field configuration: Gaussian pulse
+        phi0 = np.exp(-self.grid**2 / (2 * sigma**2))
+        
+        # Spatial derivative
+        dphi = np.gradient(phi0, self.grid)
+        
+        # Stress-energy T_uu
+        Tuu = self.stress_uu(phi0, dphi)
+        
+        # Map spatial coordinate x → temporal coordinate τ for smearing
+        tau = self.grid
+        f = smear_kernel(tau)
+        
+        # ANEC integral
+        anec_integral = np.trapz(Tuu * f, tau)
+        
+        return anec_integral
+
+    def compute_anec_with_params(self, M, alpha, beta, smear_kernel):
+        """
+        Compute ANEC with specific parameter values.
+        Optimized for parameter sweeps.
+        """
+        # Temporarily update parameters
+        old_M, old_alpha, old_beta = self.M, self.alpha, self.beta
+        self.M, self.alpha, self.beta = M, alpha, beta
+        
+        # Compute ANEC
+        anec_result = self.compute_anec(smear_kernel)
+        
+        # Restore parameters
+        self.M, self.alpha, self.beta = old_M, old_alpha, old_beta
+        
+        return anec_result
+
+    def compute_field_configuration(self):
+        """Compute ghost field configuration (fallback for torch interface)"""
+        if hasattr(self, 'params') and self.params is not None:
+            # Use torch-based implementation
+            if TORCH_AVAILABLE:
+                # Create Gaussian field configuration
+                sigma = self.params.spatial_range / 6
+                field = torch.exp(-(self.X**2 + self.Y**2) / (2 * sigma**2))
+                return field * self.params.phi_0
+            else:
+                # Fallback to numpy
+                return np.ones((self.params.grid_size, self.params.grid_size)) * self.params.phi_0
+        else:
+            # Simple 1D configuration for scanning
+            sigma = (self.grid[-1] - self.grid[0]) / 6
+            return np.exp(-self.grid**2 / (2 * sigma**2))
+
+    def compute_stress_tensor(self):
+        """Compute stress-energy tensor (torch interface compatibility)"""
+        if hasattr(self, 'params') and self.params is not None and TORCH_AVAILABLE:
+            # Placeholder for full tensor implementation
+            field = self.compute_field_configuration()
+            return torch.zeros_like(field)
+        else:
+            # Simple 1D stress for scanning interface
+            phi = self.compute_field_configuration()
+            dphi = np.gradient(phi, self.grid)
+            return self.stress_uu(phi, dphi)
     
     def stress_energy_tensor(self) -> Dict[str, torch.Tensor]:
         """
