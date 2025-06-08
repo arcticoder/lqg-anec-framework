@@ -1,0 +1,32 @@
+{
+  "20": {
+    "total_energy": -2.2332388593319557e-13,
+    "stability": 0.9957988764061685,
+    "execution_time": 0.003274202346801758,
+    "mesh_nodes": 2000
+  },
+  "30": {
+    "total_energy": -2.2332388593319557e-13,
+    "stability": 0.9955787422301947,
+    "execution_time": 0.008133411407470703,
+    "mesh_nodes": 6750
+  },
+  "50": {
+    "total_energy": -2.2332388593319557e-13,
+    "stability": 0.9959089800038843,
+    "execution_time": 0.03811788558959961,
+    "mesh_nodes": 31250
+  },
+  "70": {
+    "total_energy": -2.2332388593319557e-13,
+    "stability": 0.9955787422301947,
+    "execution_time": 0.09889483451843262,
+    "mesh_nodes": 85750
+  },
+  "100": {
+    "total_energy": -2.2332388593319557e-13,
+    "stability": 0.9955787422301947,
+    "execution_time": 0.29274559020996094,
+    "mesh_nodes": 250000
+  }
+}

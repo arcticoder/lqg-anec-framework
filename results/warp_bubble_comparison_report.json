@@ -1,15 +1,15 @@
 {
-  "timestamp": "2025-06-07 22:36:13",
+  "timestamp": "2025-06-08 07:28:29",
   "sources_tested": 2,
   "successful_sources": 2,
   "results": {
     "Ghost/Phantom EFT": {
       "success": true,
       "total_energy_J": -2.2332388593319557e-13,
-      "stability": 0.9957988764061685,
-      "max_negative_density_J_per_m3": -8.148166737861877e-16,
-      "execution_time_s": 0.00342559814453125,
-      "mesh_nodes": 2000,
+      "stability": 0.9955787422301947,
+      "max_negative_density_J_per_m3": -1.1819300169387299e-15,
+      "execution_time_s": 0.00816035270690918,
+      "mesh_nodes": 6750,
       "parameters": {
         "M": 1000,
         "alpha": 0.01,
@@ -21,10 +21,10 @@
     "Metamaterial Casimir": {
       "success": true,
       "total_energy_J": -0.03141592653589793,
-      "stability": 0.8733333333333325,
-      "max_negative_density_J_per_m3": -0.0002468144044321335,
-      "execution_time_s": 0.002506732940673828,
-      "mesh_nodes": 2000,
+      "stability": 0.6448881068765003,
+      "max_negative_density_J_per_m3": -0.00028252080856123687,
+      "execution_time_s": 0.008240461349487305,
+      "mesh_nodes": 6750,
       "parameters": {
         "epsilon": -2.0,
         "mu": -1.5,
