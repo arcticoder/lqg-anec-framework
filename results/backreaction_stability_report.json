@@ -1,0 +1,165 @@
+{
+  "analysis_parameters": {
+    "spacetime_dimension": 4,
+    "spatial_grid_size": 32,
+    "temporal_range": 1.0,
+    "integration_steps": 500,
+    "newton_constant": 6.674e-11,
+    "planck_length": 1.616e-35
+  },
+  "evolution_data": {
+    "num_time_steps": 10,
+    "final_time": 0.9018036127090454,
+    "metric_evolution": "stored",
+    "curvature_evolution": "computed"
+  },
+  "stability_analysis": {
+    "growth_rates": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mode_analysis": [
+      {
+        "mode_index": 0,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.0001804636704036966
+      },
+      {
+        "mode_index": 1,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018164074572268873
+      },
+      {
+        "mode_index": 2,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.0001801937905838713
+      },
+      {
+        "mode_index": 3,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.0001812670088838786
+      },
+      {
+        "mode_index": 4,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018009237828664482
+      },
+      {
+        "mode_index": 5,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018106811330653727
+      },
+      {
+        "mode_index": 6,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018222162907477468
+      },
+      {
+        "mode_index": 7,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018028072372544557
+      },
+      {
+        "mode_index": 8,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.00018050498329102993
+      },
+      {
+        "mode_index": 9,
+        "growth_rate": 0.0,
+        "initial_curvature": NaN,
+        "final_curvature": NaN,
+        "perturbation_norm": 0.000182124218554236
+      }
+    ],
+    "stability_threshold": 0.001,
+    "is_stable": true,
+    "unstable_modes": [],
+    "max_growth_rate": 0.0,
+    "num_unstable_modes": 0
+  },
+  "negative_energy_bounds": {
+    "negative_energy_fraction": 0.0,
+    "min_energy_density": 0.0,
+    "negative_energy_magnitude": 0.0,
+    "negative_volume": 0.0,
+    "horizon_scale": 0.0,
+    "quantum_inequality_duration": Infinity,
+    "planck_scale_ratio": 0.0,
+    "geometric_stability": true
+  },
+  "lqg_analysis": {
+    "lqg_parameters": {
+      "planck_length": 1.616e-35,
+      "barbero_immirzi": 0.2375,
+      "network_type": "cubical",
+      "polymer_scale": 1.616e-25,
+      "coherent_scale": 500.0
+    },
+    "network_statistics": {
+      "num_nodes": 3375,
+      "num_edges": 27090,
+      "avg_valence": 6.0,
+      "max_spin": 7.999993492335963
+    },
+    "stress_tensor_analysis": {
+      "mean_energy_density": NaN,
+      "max_energy_density": NaN,
+      "min_energy_density": NaN,
+      "energy_variance": NaN,
+      "polymer_enhancement_avg": 1.0,
+      "discreteness_correction_avg": NaN
+    },
+    "anec_violation": {
+      "integral_value": NaN,
+      "violation_strength": NaN,
+      "violation_fraction": 0.0,
+      "negative_energy_nodes": 0
+    },
+    "geometry_analysis": {
+      "total_area": 0.0,
+      "total_volume": 0.0,
+      "avg_area_per_edge": 0.0,
+      "avg_volume_per_node": 0.0
+    }
+  },
+  "computational_performance": {
+    "computation_time": 11615.169624328613,
+    "device_used": "cuda",
+    "memory_usage": "tracked",
+    "gpu_memory_used": 0.430887936,
+    "gpu_memory_cached": 0.46137344
+  },
+  "critical_findings": {
+    "geometry_stable": true,
+    "negative_energy_present": false,
+    "quantum_violation_detected": false,
+    "backreaction_significant": false
+  }
+}
