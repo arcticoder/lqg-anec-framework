@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "timestamp": "20250607_201115",
+    "total_configurations": 500,
+    "description": "Metamaterial Casimir parameter sweep results"
+  },
+  "results": [
+    {
+      "spacing_nm": 10.0,
+      "permittivity": 1.0,
+      "permeability": 1.0,
+      "n_layers": 5,
+      "energy_density": -0.0065087293916916925,
+      "anec_integral": -1.0196284990178483e-21,
+      "amplification_factor": 1.5018691711917188e-07,
+      "is_negative_energy": 

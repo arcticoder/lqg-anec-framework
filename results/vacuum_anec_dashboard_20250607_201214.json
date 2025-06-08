@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "timestamp": "20250607_201214",
+    "smearing_timescale_days": 7.0,
+    "target_anec_W": 1e-25,
+    "target_energy_density_J_m3": -1e-15,
+    "description": "Comprehensive vacuum source ANEC violation analysis"
+  },
+  "laboratory_sources": {
+    "casimir": {
+      "source_type": "CasimirArray",
+      "energy_density": 0.0,
+      "volume": 1e-12,
+      "total_energy": 0.0,
+      "anec_integral": 0.0,
+      "anec_ratio": 0.0,
+      "energy_ratio": 0.0,
+      "is_negative_energy": false,
+      "meets_anec_target": false,
+      "meets_energy_target": false,
+      "feasibility_score": 0.0,
+      "parameters": {
+        "n_layers": 10,
+        "spacing_range": [
+          1e-08,
+          1e-06
+        ],
+        "materials": [
+          "Au",
+          "SiO2",
+          "metamaterial"
+        ],
+        "volume": 1e-12,
+        "optimal_spacing": 1e-07
+      }
+    },
+    "dynamic": {
+      "source_type": "DynamicCasimirEffect",
+      "energy_density": -1.5791367041742973e+33,
+      "volume": 1e-09,
+      "total_energy": -1.5791367041742975e+24,
+      "anec_integral": -2.603957218241244e+18,
+      "anec_ratio": 2.603957218241244e+43,
+      "energy_ratio": 1.579136704174297e+48,
+      "is_negative_energy": true,
+      "meets_anec_target": 
