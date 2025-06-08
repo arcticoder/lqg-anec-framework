@@ -1,0 +1,281 @@
+{
+  "analysis_timestamp": "2025-06-07T19:50:05.277259",
+  "summary": {
+    "total_configurations_tested": 38,
+    "best_performers": {
+      "casimir_array": {
+        "spacing_nm": 5.0,
+        "n_layers": 200,
+        "anec_flux": -2074585.3774030784,
+        "energy_density": -2.0802014972160503
+      },
+      "squeezed_vacuum": {
+        "squeezing_parameter": 0.5,
+        "frequency_Hz": 1000000000000.0,
+        "anec_flux": 1.2155069873016498e-10,
+        "energy_density": 1.2187974919723874e-16
+      },
+      "dynamic_casimir": {
+        "frequency_Hz": 1000000000.0,
+        "modulation_depth": 0.01,
+        "anec_flux": -99730020393673.98,
+        "energy_density": -100000000.0
+      }
+    }
+  },
+  "detailed_results": {
+    "casimir_arrays": [
+      {
+        "spacing_nm": 5.0,
+        "n_layers": 50,
+        "pressure_Pa": -104010074.86080298,
+        "energy_density": -0.5200503743040149,
+        "anec_flux": -518646.344350772
+      },
+      {
+        "spacing_nm": 5.0,
+        "n_layers": 100,
+        "pressure_Pa": -208020149.72160548,
+        "energy_density": -1.0401007486080274,
+        "anec_flux": -1037292.6887015415
+      },
+      {
+        "spacing_nm": 5.0,
+        "n_layers": 200,
+        "pressure_Pa": -416040299.44321007,
+        "energy_density": -2.0802014972160503,
+        "anec_flux": -2074585.3774030784
+      },
+      {
+        "spacing_nm": 10.0,
+        "n_layers": 50,
+        "pressure_Pa": -6500629.678800186,
+        "energy_density": -0.06500629678800186,
+        "anec_flux": -64830.7930438465
+      },
+      {
+        "spacing_nm": 10.0,
+        "n_layers": 100,
+        "pressure_Pa": -13001259.357600342,
+        "energy_density": -0.13001259357600342,
+        "anec_flux": -129661.58608769269
+      },
+      {
+        "spacing_nm": 10.0,
+        "n_layers": 200,
+        "pressure_Pa": -26002518.71520063,
+        "energy_density": -0.2600251871520063,
+        "anec_flux": -259323.1721753848
+      },
+      {
+        "spacing_nm": 20.0,
+        "n_layers": 50,
+        "pressure_Pa": -406289.35492501163,
+        "energy_density": -0.008125787098500233,
+        "anec_flux": -8103.849130480812
+      },
+      {
+        "spacing_nm": 20.0,
+        "n_layers": 100,
+        "pressure_Pa": -812578.7098500214,
+        "energy_density": -0.016251574197000428,
+        "anec_flux": -16207.698260961586
+      },
+      {
+        "spacing_nm": 20.0,
+        "n_layers": 200,
+        "pressure_Pa": -1625157.4197000393,
+        "energy_density": -0.032503148394000786,
+        "anec_flux": -32415.3965219231
+      },
+      {
+        "spacing_nm": 50.0,
+        "n_layers": 50,
+        "pressure_Pa": -10401.00748608029,
+        "energy_density": -0.0005200503743040145,
+        "anec_flux": -518.6463443507715
+      },
+      {
+        "spacing_nm": 50.0,
+        "n_layers": 100,
+        "pressure_Pa": -20802.014972160618,
+        "energy_density": -0.0010401007486080308,
+        "anec_flux": -1037.2926887015446
+      },
+      {
+        "spacing_nm": 50.0,
+        "n_layers": 200,
+        "pressure_Pa": -41604.02994432122,
+        "energy_density": -0.002080201497216061,
+        "anec_flux": -2074.5853774030893
+      }
+    ],
+    "squeezed_vacuum": [
+      {
+        "squeezing_parameter": 0.5,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 1.2187974919723874e-16,
+        "anec_flux": 1.2155069873016498e-10
+      },
+      {
+        "squeezing_parameter": 0.7777777777777778,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 6.992892302053622e-17,
+        "anec_flux": 6.974012918945742e-11
+      },
+      {
+        "squeezing_parameter": 1.0555555555555556,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 4.0121958791517094e-17,
+        "anec_flux": 4.00136376851215e-11
+      },
+      {
+        "squeezing_parameter": 1.3333333333333335,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 2.3020111103319235e-17,
+        "anec_flux": 2.2957961497986694e-11
+      },
+      {
+        "squeezing_parameter": 1.6111111111111112,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 1.3207867491285304e-17,
+        "anec_flux": 1.3172208942628278e-11
+      },
+      {
+        "squeezing_parameter": 1.8888888888888888,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 7.578059153770474e-18,
+        "anec_flux": 7.557599939499978e-12
+      },
+      {
+        "squeezing_parameter": 2.166666666666667,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 4.347937362027763e-18,
+        "anec_flux": 4.336198817854462e-12
+      },
+      {
+        "squeezing_parameter": 2.4444444444444446,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 2.4946439346111808e-18,
+        "anec_flux": 2.487908904737283e-12
+      },
+      {
+        "squeezing_parameter": 2.7222222222222223,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 1.4313104910083977e-18,
+        "anec_flux": 1.427446244579471e-12
+      },
+      {
+        "squeezing_parameter": 3.0,
+        "frequency_Hz": 1000000000000.0,
+        "energy_density": 8.212192903544118e-19,
+        "anec_flux": 8.190021657472402e-13
+      }
+    ],
+    "dynamic_casimir": [
+      {
+        "frequency_Hz": 1000000000.0,
+        "modulation_depth": 0.01,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 1000000000.0,
+        "modulation_depth": 0.05,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 1000000000.0,
+        "modulation_depth": 0.1,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 1000000000.0,
+        "modulation_depth": 0.2,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 5000000000.0,
+        "modulation_depth": 0.01,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 5000000000.0,
+        "modulation_depth": 0.05,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 5000000000.0,
+        "modulation_depth": 0.1,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 5000000000.0,
+        "modulation_depth": 0.2,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 10000000000.0,
+        "modulation_depth": 0.01,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 10000000000.0,
+        "modulation_depth": 0.05,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 10000000000.0,
+        "modulation_depth": 0.1,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 10000000000.0,
+        "modulation_depth": 0.2,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 50000000000.0,
+        "modulation_depth": 0.01,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 50000000000.0,
+        "modulation_depth": 0.05,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 50000000000.0,
+        "modulation_depth": 0.1,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      },
+      {
+        "frequency_Hz": 50000000000.0,
+        "modulation_depth": 0.2,
+        "energy_density": -100000000.0,
+        "anec_flux": -99730020393673.98
+      }
+    ]
+  },
+  "recommendations": [
+    "Casimir arrays show highest potential with flux magnitude 2.07e+06",
+    "Optimal Casimir configuration: 5.0 nm spacing, 200 layers",
+    "Squeezed vacuum optimal at squeezing parameter 0.50",
+    "Focus development on multi-layer Casimir arrays for maximum performance",
+    "Consider hybrid approaches combining multiple vacuum engineering techniques"
+  ]
+}

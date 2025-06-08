@@ -1,509 +1,479 @@
 #!/usr/bin/env python3
 """
-Vacuum Engineering ANEC Integration Module
+Vacuum-ANEC Integration Script
 
-Integrates laboratory vacuum engineering sources with the existing ANEC violation
-analysis framework. Provides tools to:
+This script runs each laboratory vacuum source through the ANEC integrator
+with quantum inequality (QI) smearing to assess experimental feasibility
+for ANEC violation.
 
-1. Convert vacuum energy densities to ANEC violation predictions
-2. Apply quantum inequality smearing kernels to lab sources
-3. Interface with existing LQG coherent state analysis
-4. Optimize vacuum parameters for maximum ANEC violation
-5. Compare theoretical predictions with experimental constraints
+Features:
+- Connects vacuum engineering sources to ANEC analysis framework
+- Applies QI smearing kernels to negative energy distributions
+- Generates comprehensive feasibility reports
+- Identifies optimal configurations for laboratory implementation
 
-Author: LQG-ANEC Framework - Integration Team
+Usage:
+    python scripts/vacuum_anec_integration.py
 """
 
-import numpy as np
-from scipy.integrate import quad, simpson
-from scipy.optimize import minimize, differential_evolution
-from typing import Dict, List, Tuple, Optional, Callable, Union
 import sys
 import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-# Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+from scipy.constants import hbar, c, pi
+import json
+from datetime import datetime
 
-try:
-    from vacuum_engineering import (
-        CasimirArray, DynamicCasimirEffect, SqueezedVacuumResonator,
-        MetamaterialCasimir, vacuum_energy_to_anec_flux
-    )
-    from anec_violation_analysis import coherent_state_anec_violation
-    from custom_kernels import CustomKernelLibrary, create_standard_library
-    from polymer_quantization import polymer_quantum_inequality_bound
-except ImportError as e:
-    print(f"Warning: Could not import some modules: {e}")
-    print("Some functionality may be limited.")
+from vacuum_engineering import (
+    build_lab_sources, vacuum_energy_to_anec_flux, 
+    MATERIAL_DATABASE, comprehensive_vacuum_analysis
+)
 
 class VacuumANECIntegrator:
     """
     Integrates vacuum engineering sources with ANEC violation analysis.
     
-    Provides unified framework for comparing laboratory vacuum sources
-    with theoretical LQG predictions and quantum inequality constraints.
+    Provides QI smearing, temporal integration, and feasibility assessment
+    for laboratory negative energy sources.
     """
     
-    def __init__(self, hbar: float = 1.055e-34, c: float = 299792458):
+    def __init__(self, temporal_scale: float = 1e-6):
         """
-        Initialize vacuum-ANEC integrator.
+        Initialize ANEC integrator.
         
         Args:
-            hbar: Reduced Planck constant
-            c: Speed of light
+            temporal_scale: Characteristic temporal scale for QI smearing (seconds)
         """
-        self.hbar = hbar
-        self.c = c
+        self.tau = temporal_scale
+        self.results = {}
         
-        # Initialize vacuum engineering systems
-        self.casimir = CasimirArray(temperature=4.0)
-        self.dynamic = DynamicCasimirEffect()
-        self.squeezed = SqueezedVacuumResonator()
-        self.metamaterial = MetamaterialCasimir()
-        
-        # Load kernel library
-        try:
-            self.kernel_lib = create_standard_library()
-        except:
-            self.kernel_lib = None
-            print("Warning: Could not load kernel library")
-        
-        print("Vacuum-ANEC Integrator initialized")
-    
-    def compute_vacuum_anec_violation(self, vacuum_type: str, 
-                                    parameters: Dict, 
-                                    temporal_profile: Dict) -> Dict:
+    def qi_smearing_kernel(self, t: float, kernel_type: str = 'gaussian') -> float:
         """
-        Compute ANEC violation from specified vacuum source.
+        Quantum inequality smearing kernel.
         
         Args:
-            vacuum_type: Type of vacuum source ('casimir', 'dynamic', 'squeezed')
-            parameters: Source-specific parameters
-            temporal_profile: Temporal smearing parameters {'tau': scale, 'kernel': type}
+            t: Time coordinate
+            kernel_type: Type of smearing ('gaussian', 'exponential', 'lorentzian')
             
         Returns:
-            Dictionary with ANEC violation analysis results
+            Smearing kernel value
         """
-        results = {'vacuum_type': vacuum_type, 'parameters': parameters}
-        
-        # Extract energy density and volume based on vacuum type
-        if vacuum_type == 'casimir':
-            if 'layers' in parameters and 'spacing_list' in parameters:
-                # Multi-layer configuration
-                energy_density = self._compute_casimir_energy_density(
-                    parameters['layers'], parameters['spacing_list'],
-                    parameters.get('materials', ['Au'] * parameters['layers'])
-                )
-                volume = parameters.get('area', 1e-6) * sum(parameters['spacing_list'])
-            else:
-                # Single layer
-                spacing = parameters.get('spacing', 100e-9)
-                material = parameters.get('material', 'Au')
-                pressure = self.casimir.casimir_pressure(spacing, material)
-                area = parameters.get('area', 1e-6)
-                volume = area * spacing
-                energy_density = pressure * spacing / volume
-                
-        elif vacuum_type == 'dynamic':
-            circuit_freq = parameters.get('circuit_frequency', 10e9)
-            drive_freq = parameters.get('drive_frequency', 20e9)
-            drive_amp = parameters.get('drive_amplitude', 0.1)
-            quality_factor = parameters.get('quality_factor', 1000)
-            volume = parameters.get('volume', 1e-9)
-            
-            self.dynamic.f0 = circuit_freq
-            self.dynamic.drive_amp = drive_amp
-            energy_density = self.dynamic.negative_energy_density(drive_freq, volume, quality_factor)
-            
-        elif vacuum_type == 'squeezed':
-            resonator_freq = parameters.get('frequency', 1e14)
-            squeezing_param = parameters.get('squeezing', 1.0)
-            volume = parameters.get('volume', 1e-12)
-            
-            self.squeezed.omega_res = 2 * np.pi * resonator_freq
-            self.squeezed.xi = squeezing_param
-            energy_density = self.squeezed.squeezed_energy_density(volume)
-            
-        else:
-            raise ValueError(f"Unknown vacuum type: {vacuum_type}")
-        
-        results['energy_density'] = energy_density
-        results['volume'] = volume
-        results['total_energy'] = energy_density * volume
-        
-        # Apply temporal smearing for ANEC violation
-        tau = temporal_profile.get('tau', 1e-6)
-        kernel_type = temporal_profile.get('kernel', 'gaussian')
-        
-        # Define smearing kernel
         if kernel_type == 'gaussian':
-            def kernel(t, tau_scale):
-                return np.exp(-t**2 / (2*tau_scale**2)) / np.sqrt(2*np.pi*tau_scale**2)
-        elif kernel_type == 'lorentzian':
-            def kernel(t, tau_scale):
-                return (tau_scale/np.pi) / (t**2 + tau_scale**2)
+            return np.exp(-t**2 / (2*self.tau**2)) / np.sqrt(2*pi*self.tau**2)
         elif kernel_type == 'exponential':
-            def kernel(t, tau_scale):
-                return np.exp(-abs(t)/tau_scale) / (2*tau_scale)
+            return np.exp(-np.abs(t) / self.tau) / (2*self.tau)
+        elif kernel_type == 'lorentzian':
+            return (self.tau / pi) / (t**2 + self.tau**2)
         else:
-            # Default to gaussian
-            def kernel(t, tau_scale):
-                return np.exp(-t**2 / (2*tau_scale**2)) / np.sqrt(2*np.pi*tau_scale**2)
-        
-        # Compute ANEC violation flux
-        anec_flux = vacuum_energy_to_anec_flux(energy_density, volume, tau, kernel)
-        results['anec_flux'] = anec_flux
-        results['temporal_scale'] = tau
-        
-        # Compare with quantum inequality bounds
-        try:
-            qi_bound = polymer_quantum_inequality_bound(tau, mu=1e-35)
-            results['qi_bound'] = qi_bound
-            results['qi_violation_ratio'] = abs(anec_flux) / qi_bound if qi_bound > 0 else np.inf
-        except:
-            results['qi_bound'] = None
-            results['qi_violation_ratio'] = None
-        
-        return results
+            raise ValueError(f"Unknown kernel type: {kernel_type}")
     
-    def _compute_casimir_energy_density(self, layers: int, spacing_list: List[float], 
-                                      materials: List[str]) -> float:
-        """Helper function to compute multi-layer Casimir energy density."""
-        from vacuum_engineering import MATERIAL_DATABASE
-        
-        perm_list = [MATERIAL_DATABASE[mat]['permittivity'] for mat in materials]
-        mu_list = [MATERIAL_DATABASE[mat]['permeability'] for mat in materials]
-        
-        pressure = self.casimir.stack_pressure(layers, spacing_list, perm_list, mu_list)
-        
-        # Convert pressure to energy density
-        total_thickness = sum(spacing_list)
-        return pressure / total_thickness  # Simplified conversion
-    
-    def optimize_vacuum_for_anec(self, vacuum_type: str, 
-                               target_flux: float = 1e-25,
-                               constraints: Optional[Dict] = None) -> Dict:
+    def compute_anec_violation(self, energy_density: float, volume: float, 
+                              duration: float, kernel_type: str = 'gaussian') -> dict:
         """
-        Optimize vacuum source parameters to maximize ANEC violation.
+        Compute ANEC violation from vacuum source parameters.
         
         Args:
-            vacuum_type: Type of vacuum source to optimize
-            target_flux: Target ANEC violation flux (W)
-            constraints: Dictionary of parameter constraints
+            energy_density: Negative energy density (J/m³)
+            volume: Source volume (m³)
+            duration: Source operation duration (s)
+            kernel_type: QI smearing kernel type
             
         Returns:
-            Optimization results with best parameters and achieved flux
+            Dictionary with ANEC violation analysis
         """
-        constraints = constraints or {}
+        total_energy = energy_density * volume
         
-        def objective(params):
-            """Objective function: minimize |achieved_flux - target_flux|"""
-            try:
-                # Convert parameter array to dictionary based on vacuum type
-                param_dict = self._params_array_to_dict(vacuum_type, params, constraints)
+        # Temporal integration with QI smearing
+        def integrand(t):
+            # Source profile (assume uniform over duration)
+            if abs(t) <= duration / 2:
+                source_profile = 1.0
+            else:
+                source_profile = 0.0
                 
-                # Compute ANEC violation
-                temporal_profile = {'tau': 1e-6, 'kernel': 'gaussian'}
-                result = self.compute_vacuum_anec_violation(vacuum_type, param_dict, temporal_profile)
-                
-                achieved_flux = abs(result['anec_flux'])
-                error = abs(achieved_flux - target_flux)
-                
-                # Add penalty for unfeasible configurations
-                if not self._check_feasibility(vacuum_type, param_dict):
-                    error *= 1000
-                
-                return error
-                
-            except Exception as e:
-                return 1e10  # Large penalty for invalid configurations
+            return self.qi_smearing_kernel(t, kernel_type) * source_profile * total_energy
         
-        # Define parameter bounds based on vacuum type
-        bounds = self._get_parameter_bounds(vacuum_type, constraints)
+        # Integrate over extended time window
+        integration_window = max(duration, 5*self.tau)
+        flux, integration_error = quad(integrand, -integration_window, integration_window)
         
-        # Run optimization
-        result = differential_evolution(objective, bounds, seed=42, maxiter=200)
+        # Normalize by characteristic time
+        anec_flux = flux / self.tau
         
-        if result.success:
-            # Convert optimal parameters back to dictionary
-            optimal_params = self._params_array_to_dict(vacuum_type, result.x, constraints)
-            
-            # Compute final result with optimal parameters
-            temporal_profile = {'tau': 1e-6, 'kernel': 'gaussian'}
-            final_result = self.compute_vacuum_anec_violation(vacuum_type, optimal_params, temporal_profile)
-            
-            optimization_result = {
-                'success': True,
-                'optimal_parameters': optimal_params,
-                'achieved_flux': final_result['anec_flux'],
-                'target_flux': target_flux,
-                'error': result.fun,
-                'full_analysis': final_result
-            }
-        else:
-            optimization_result = {
-                'success': False,
-                'error': 'Optimization failed',
-                'message': result.message
-            }
-        
-        return optimization_result
-    
-    def _params_array_to_dict(self, vacuum_type: str, params: np.ndarray, 
-                            constraints: Dict) -> Dict:
-        """Convert parameter array to dictionary for specific vacuum type."""
-        param_dict = {}
-        
-        if vacuum_type == 'casimir':
-            # Parameters: [spacing, area, n_layers, material_index]
-            param_dict['spacing'] = params[0]
-            param_dict['area'] = params[1] 
-            param_dict['layers'] = int(np.round(params[2]))
-            
-            # Material selection
-            materials = constraints.get('materials', ['Au', 'SiO2', 'metamaterial'])
-            mat_idx = int(np.clip(np.round(params[3]), 0, len(materials)-1))
-            param_dict['material'] = materials[mat_idx]
-            
-            # Create layer configuration
-            param_dict['spacing_list'] = [param_dict['spacing']] * param_dict['layers']
-            param_dict['materials'] = [param_dict['material']] * param_dict['layers']
-            
-        elif vacuum_type == 'dynamic':
-            # Parameters: [circuit_freq, drive_freq, drive_amp, quality_factor, volume]
-            param_dict['circuit_frequency'] = params[0]
-            param_dict['drive_frequency'] = params[1]
-            param_dict['drive_amplitude'] = params[2]
-            param_dict['quality_factor'] = params[3]
-            param_dict['volume'] = params[4]
-            
-        elif vacuum_type == 'squeezed':
-            # Parameters: [frequency, squeezing, volume]
-            param_dict['frequency'] = params[0]
-            param_dict['squeezing'] = params[1]
-            param_dict['volume'] = params[2]
-        
-        return param_dict
-    
-    def _get_parameter_bounds(self, vacuum_type: str, constraints: Dict) -> List[Tuple]:
-        """Get parameter bounds for optimization based on vacuum type."""
-        if vacuum_type == 'casimir':
-            spacing_range = constraints.get('spacing_range', (10e-9, 1e-6))
-            area_range = constraints.get('area_range', (1e-8, 1e-4))
-            layer_range = constraints.get('layer_range', (1, 50))
-            material_range = (0, len(constraints.get('materials', ['Au', 'SiO2', 'metamaterial']))-1)
-            
-            return [spacing_range, area_range, layer_range, material_range]
-            
-        elif vacuum_type == 'dynamic':
-            freq_range = constraints.get('circuit_freq_range', (1e9, 1e12))
-            drive_freq_range = constraints.get('drive_freq_range', (2e9, 2e12))
-            amp_range = constraints.get('drive_amp_range', (0.01, 0.5))
-            q_range = constraints.get('quality_range', (100, 100000))
-            vol_range = constraints.get('volume_range', (1e-12, 1e-6))
-            
-            return [freq_range, drive_freq_range, amp_range, q_range, vol_range]
-            
-        elif vacuum_type == 'squeezed':
-            freq_range = constraints.get('freq_range', (1e12, 1e15))
-            squeeze_range = constraints.get('squeeze_range', (0.1, 5.0))
-            vol_range = constraints.get('volume_range', (1e-15, 1e-9))
-            
-            return [freq_range, squeeze_range, vol_range]
-        
-        return []
-    
-    def _check_feasibility(self, vacuum_type: str, params: Dict) -> bool:
-        """Check if parameter configuration is physically feasible."""
-        if vacuum_type == 'casimir':
-            spacing = params.get('spacing', 0)
-            layers = params.get('layers', 0)
-            return spacing > 1e-9 and spacing < 1e-3 and layers > 0 and layers < 100
-            
-        elif vacuum_type == 'dynamic':
-            circuit_freq = params.get('circuit_frequency', 0)
-            drive_freq = params.get('drive_frequency', 0)
-            drive_amp = params.get('drive_amplitude', 0)
-            
-            # Drive frequency should be near 2×circuit frequency for resonance
-            freq_ratio = drive_freq / circuit_freq if circuit_freq > 0 else 0
-            return (1.5 < freq_ratio < 3.0 and 
-                   0.01 < drive_amp < 0.5 and
-                   circuit_freq < 1e12)
-            
-        elif vacuum_type == 'squeezed':
-            squeezing = params.get('squeezing', 0)
-            frequency = params.get('frequency', 0)
-            return 0.1 < squeezing < 5.0 and frequency > 1e12
-        
-        return True
-    
-    def compare_with_lqg_predictions(self, vacuum_results: Dict) -> Dict:
-        """
-        Compare vacuum engineering results with LQG coherent state predictions.
-        
-        Args:
-            vacuum_results: Results from vacuum ANEC violation analysis
-            
-        Returns:
-            Comparison analysis including ratios and feasibility assessment
-        """
-        comparison = {'vacuum_results': vacuum_results}
-        
-        # Attempt to compute LQG coherent state ANEC violation for comparison
-        try:
-            # Use parameters similar to vacuum system
-            lqg_params = {
-                'polymer_scale': 1e-35,  # Planck scale
-                'coherent_alpha': 1.0,
-                'temporal_scale': vacuum_results.get('temporal_scale', 1e-6)
-            }
-            
-            # This would require implementation in anec_violation_analysis module
-            # For now, use simplified estimate
-            lqg_flux_estimate = self._estimate_lqg_flux(lqg_params)
-            
-            comparison['lqg_flux_estimate'] = lqg_flux_estimate
-            comparison['vacuum_to_lqg_ratio'] = (
-                abs(vacuum_results['anec_flux']) / abs(lqg_flux_estimate) 
-                if lqg_flux_estimate != 0 else np.inf
-            )
-            
-        except Exception as e:
-            comparison['lqg_comparison_error'] = str(e)
-            comparison['lqg_flux_estimate'] = None
-            comparison['vacuum_to_lqg_ratio'] = None
-        
-        # Add feasibility assessment
-        vacuum_flux = abs(vacuum_results['anec_flux'])
-        target_flux = 1e-25  # W
-        
-        comparison['target_achievement'] = vacuum_flux / target_flux
-        comparison['orders_of_magnitude_gap'] = np.log10(target_flux / vacuum_flux) if vacuum_flux > 0 else np.inf
-        
-        # Assessment categories
-        if comparison['target_achievement'] > 0.1:
-            comparison['feasibility'] = 'high'
-        elif comparison['target_achievement'] > 0.01:
-            comparison['feasibility'] = 'moderate'
-        else:
-            comparison['feasibility'] = 'low'
-        
-        return comparison
-    
-    def _estimate_lqg_flux(self, params: Dict) -> float:
-        """Simplified estimate of LQG coherent state ANEC violation flux."""
-        # This is a placeholder - would need full LQG implementation
-        polymer_scale = params['polymer_scale']
-        alpha = params['coherent_alpha']
-        tau = params['temporal_scale']
-        
-        # Dimensional analysis estimate
-        flux_estimate = (self.hbar * self.c / polymer_scale**2) * alpha**2 * tau
-        
-        return -flux_estimate  # Negative for ANEC violation
-
-def run_comprehensive_vacuum_anec_analysis():
-    """
-    Run comprehensive analysis comparing all vacuum sources with ANEC targets.
-    """
-    print("Comprehensive Vacuum-ANEC Analysis")
-    print("=" * 50)
-    
-    integrator = VacuumANECIntegrator()
-    
-    # Define test configurations for each vacuum type
-    test_configs = {
-        'casimir': {
-            'parameters': {
-                'spacing': 100e-9,  # 100 nm
-                'area': 1e-6,       # 1 mm²
-                'layers': 10,
-                'material': 'Au'
-            },
-            'temporal_profile': {'tau': 1e-6, 'kernel': 'gaussian'}
-        },
-        'dynamic': {
-            'parameters': {
-                'circuit_frequency': 10e9,   # 10 GHz
-                'drive_frequency': 20e9,     # 20 GHz  
-                'drive_amplitude': 0.2,
-                'quality_factor': 10000,
-                'volume': 1e-9              # 1 mm³
-            },
-            'temporal_profile': {'tau': 1e-6, 'kernel': 'gaussian'}
-        },
-        'squeezed': {
-            'parameters': {
-                'frequency': 1e14,          # 100 THz (infrared)
-                'squeezing': 2.0,
-                'volume': 1e-12             # 1 μm³
-            },
-            'temporal_profile': {'tau': 1e-6, 'kernel': 'gaussian'}
+        return {
+            'anec_flux': anec_flux,
+            'total_energy': total_energy,
+            'integration_error': integration_error,
+            'kernel_type': kernel_type,
+            'temporal_scale': self.tau,
+            'violation_strength': abs(anec_flux) if anec_flux < 0 else 0.0
         }
-    }
     
-    results = {}
-    
-    # Analyze each vacuum type
-    for vacuum_type, config in test_configs.items():
-        print(f"\nAnalyzing {vacuum_type} vacuum source...")
+    def analyze_casimir_source(self, source_config: dict) -> dict:
+        """
+        Analyze Casimir array source for ANEC violation.
         
-        # Compute ANEC violation
-        vacuum_result = integrator.compute_vacuum_anec_violation(
-            vacuum_type, config['parameters'], config['temporal_profile']
+        Args:
+            source_config: Configuration dictionary from build_lab_sources
+            
+        Returns:
+            ANEC analysis results
+        """
+        casimir_source = source_config['source']
+        params = source_config['params']
+        
+        # Test optimal configuration
+        spacing = params['optimal_spacing']
+        material = 'SiO2'  # High-performance dielectric
+        
+        # Compute Casimir pressure and energy density
+        pressure = casimir_source.casimir_pressure(
+            spacing, 
+            MATERIAL_DATABASE[material]['permittivity']
         )
         
-        # Compare with LQG predictions
-        comparison = integrator.compare_with_lqg_predictions(vacuum_result)
+        # Multi-layer enhancement
+        n_layers = params['n_layers']
+        total_pressure = pressure * n_layers
         
-        # Optimize for target flux
-        print(f"  Optimizing {vacuum_type} configuration...")
-        optimization = integrator.optimize_vacuum_for_anec(vacuum_type, target_flux=1e-25)
+        # Convert to energy density
+        energy_density = total_pressure * spacing / params['volume']
         
-        results[vacuum_type] = {
-            'baseline_analysis': vacuum_result,
-            'lqg_comparison': comparison,
-            'optimization': optimization
+        # Assume quasi-static operation (long duration)
+        duration = 1e-3  # 1 ms operation time
+        
+        anec_result = self.compute_anec_violation(energy_density, params['volume'], duration)
+        
+        # Add Casimir-specific metrics
+        anec_result.update({
+            'source_type': 'casimir_array',
+            'casimir_pressure': pressure,
+            'total_pressure': total_pressure,
+            'layer_count': n_layers,
+            'plate_spacing': spacing,
+            'material': material,
+            'enhancement_factor': n_layers
+        })
+        
+        return anec_result
+    
+    def analyze_dynamic_casimir_source(self, source_config: dict) -> dict:
+        """
+        Analyze dynamic Casimir source for ANEC violation.
+        
+        Args:
+            source_config: Configuration dictionary from build_lab_sources
+            
+        Returns:
+            ANEC analysis results
+        """
+        dynamic_source = source_config['source']
+        params = source_config['params']
+        
+        # Compute negative energy density
+        energy_density = dynamic_source.negative_energy_density(
+            params['drive_frequency'],
+            params['volume'],
+            params['quality_factor']
+        )
+        
+        # Dynamic Casimir is inherently time-dependent
+        # Duration limited by drive pulse length
+        duration = 1.0 / params['drive_frequency']  # Single drive cycle
+        
+        anec_result = self.compute_anec_violation(energy_density, params['volume'], duration)
+        
+        # Add dynamic Casimir-specific metrics
+        photon_rate = dynamic_source.photon_creation_rate(
+            params['drive_frequency'], 
+            params['quality_factor']
+        )
+        
+        anec_result.update({
+            'source_type': 'dynamic_casimir',
+            'drive_frequency': params['drive_frequency'],
+            'quality_factor': params['quality_factor'],
+            'photon_creation_rate': photon_rate,
+            'drive_cycle_duration': duration
+        })
+        
+        return anec_result
+    
+    def analyze_squeezed_vacuum_source(self, source_config: dict) -> dict:
+        """
+        Analyze squeezed vacuum source for ANEC violation.
+        
+        Args:
+            source_config: Configuration dictionary from build_lab_sources
+            
+        Returns:
+            ANEC analysis results
+        """
+        squeezed_source = source_config['source']
+        params = source_config['params']
+        
+        # Compute squeezed vacuum energy density
+        energy_density = squeezed_source.squeezed_energy_density(params['volume'])
+        
+        # Squeezed states can be maintained continuously with active stabilization
+        duration = 1e-3  # 1 ms coherence time
+        
+        anec_result = self.compute_anec_violation(energy_density, params['volume'], duration)
+        
+        # Add squeezed vacuum-specific metrics
+        stabilization_power = squeezed_source.stabilization_power()
+        
+        anec_result.update({
+            'source_type': 'squeezed_vacuum',
+            'squeezing_parameter': squeezed_source.xi,
+            'resonator_frequency': squeezed_source.omega_res / (2*pi),
+            'stabilization_power': stabilization_power,
+            'coherence_time': duration
+        })
+        
+        return anec_result
+    
+    def run_comprehensive_analysis(self, target_anec_flux: float = 1e-25) -> dict:
+        """
+        Run comprehensive ANEC integration analysis for all vacuum sources.
+        
+        Args:
+            target_anec_flux: Target ANEC violation flux for comparison (W)
+            
+        Returns:
+            Complete analysis results
+        """
+        print("Running Vacuum-ANEC Integration Analysis...")
+        print("=" * 50)
+        
+        # Build laboratory sources
+        sources = build_lab_sources('comprehensive')
+        
+        analysis_results = {
+            'timestamp': datetime.now().isoformat(),
+            'target_anec_flux': target_anec_flux,
+            'temporal_scale': self.tau,
+            'sources': {}
         }
         
-        # Print summary
-        print(f"  Baseline flux: {vacuum_result['anec_flux']:.2e} W")
-        print(f"  Target achievement: {comparison['target_achievement']:.2e}")
-        print(f"  Feasibility: {comparison['feasibility']}")
+        # Analyze each source type
+        for source_name, source_config in sources.items():
+            print(f"\nAnalyzing {source_name} source...")
+            
+            if source_name == 'casimir':
+                result = self.analyze_casimir_source(source_config)
+            elif source_name == 'dynamic':
+                result = self.analyze_dynamic_casimir_source(source_config)
+            elif source_name == 'squeezed':
+                result = self.analyze_squeezed_vacuum_source(source_config)
+            else:
+                continue
+            
+            # Compute target ratios and feasibility
+            result['target_ratio'] = abs(result['anec_flux'] / target_anec_flux) if result['anec_flux'] < 0 else 0.0
+            result['feasible'] = result['target_ratio'] > 0.1  # Within order of magnitude
+            result['experimentally_accessible'] = (
+                result['violation_strength'] > 1e-30 and  # Detectable threshold
+                result['total_energy'] > -1e-18  # Femtojoule scale
+            )
+            
+            analysis_results['sources'][source_name] = result
+            
+            # Print key results
+            print(f"  ANEC flux: {result['anec_flux']:.2e} W")
+            print(f"  Target ratio: {result['target_ratio']:.2e}")
+            print(f"  Feasible: {result['feasible']}")
+            print(f"  Experimentally accessible: {result['experimentally_accessible']}")
         
-        if optimization['success']:
-            print(f"  Optimized flux: {optimization['achieved_flux']:.2e} W")
-            print(f"  Optimization improvement: {abs(optimization['achieved_flux']/vacuum_result['anec_flux']):.2f}×")
+        # Find best performing source
+        viable_sources = {k: v for k, v in analysis_results['sources'].items() 
+                         if v['target_ratio'] > 0}
+        
+        if viable_sources:
+            best_source = max(viable_sources.keys(), 
+                            key=lambda k: viable_sources[k]['target_ratio'])
+            analysis_results['best_source'] = best_source
+            analysis_results['best_target_ratio'] = viable_sources[best_source]['target_ratio']
+        else:
+            analysis_results['best_source'] = None
+            analysis_results['best_target_ratio'] = 0.0
+        
+        self.results = analysis_results
+        return analysis_results
     
-    # Overall comparison
-    print(f"\nOverall Comparison:")
-    print("-" * 30)
+    def generate_report(self, output_path: str = 'results/vacuum_anec_integration_report.json'):
+        """
+        Generate comprehensive JSON report of vacuum-ANEC integration analysis.
+        
+        Args:
+            output_path: Path to save the report
+        """
+        if not self.results:
+            raise ValueError("No analysis results available. Run analysis first.")
+        
+        # Ensure results directory exists
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+          # Convert numpy types to JSON serializable
+        def convert_types(obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, (np.integer, np.floating, np.complexfloating)):
+                return obj.item()
+            elif isinstance(obj, np.bool_):
+                return bool(obj)
+            elif isinstance(obj, dict):
+                return {k: convert_types(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_types(v) for v in obj]
+            else:
+                return obj
+        
+        serializable_results = convert_types(self.results)
+        
+        with open(output_path, 'w') as f:
+            json.dump(serializable_results, f, indent=2)
+        
+        print(f"\nReport saved to: {output_path}")
+        
+        return output_path
     
-    best_baseline = max(results.keys(), 
-                       key=lambda k: abs(results[k]['baseline_analysis']['anec_flux']))
-    best_optimized = max(results.keys(),
-                        key=lambda k: abs(results[k]['optimization']['achieved_flux']) 
-                        if results[k]['optimization']['success'] else 0)
+    def create_visualization(self, save_path: str = 'results/vacuum_anec_comparison.png'):
+        """
+        Create visualization comparing vacuum sources for ANEC violation.
+        
+        Args:
+            save_path: Path to save the plot
+        """
+        if not self.results:
+            raise ValueError("No analysis results available. Run analysis first.")
+        
+        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(14, 10))
+        
+        sources = list(self.results['sources'].keys())
+        colors = ['blue', 'red', 'green', 'orange'][:len(sources)]
+        
+        # 1. ANEC Flux Comparison
+        anec_fluxes = [abs(self.results['sources'][s]['anec_flux']) for s in sources]
+        target_flux = self.results['target_anec_flux']
+        
+        bars1 = ax1.bar(sources, anec_fluxes, color=colors, alpha=0.7)
+        ax1.axhline(y=target_flux, color='black', linestyle='--', 
+                   label=f'Target: {target_flux:.1e} W')
+        ax1.set_ylabel('|ANEC Flux| (W)')
+        ax1.set_title('ANEC Violation Flux Comparison')
+        ax1.set_yscale('log')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Add value labels on bars
+        for bar, flux in zip(bars1, anec_fluxes):
+            if flux > 0:
+                ax1.text(bar.get_x() + bar.get_width()/2, flux,
+                        f'{flux:.1e}', ha='center', va='bottom', fontsize=8)
+        
+        # 2. Target Ratio Comparison
+        target_ratios = [self.results['sources'][s]['target_ratio'] for s in sources]
+        
+        bars2 = ax2.bar(sources, target_ratios, color=colors, alpha=0.7)
+        ax2.axhline(y=1.0, color='black', linestyle='--', label='Target = 1.0')
+        ax2.set_ylabel('Target Ratio')
+        ax2.set_title('Target Achievement Ratio')
+        ax2.set_yscale('log')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+        
+        for bar, ratio in zip(bars2, target_ratios):
+            if ratio > 0:
+                ax2.text(bar.get_x() + bar.get_width()/2, ratio,
+                        f'{ratio:.1e}', ha='center', va='bottom', fontsize=8)
+        
+        # 3. Energy Density vs Volume
+        energy_densities = [self.results['sources'][s]['total_energy'] / 
+                           (1e-15 if s == 'dynamic' else 1e-12) for s in sources]  # Normalize by typical volumes
+        volumes = [1e-15 if s == 'dynamic' else 1e-12 for s in sources]  # Typical volumes
+        
+        scatter = ax3.scatter(volumes, energy_densities, c=colors, s=100, alpha=0.7)
+        for i, source in enumerate(sources):
+            ax3.annotate(source, (volumes[i], energy_densities[i]),
+                        xytext=(5, 5), textcoords='offset points', fontsize=9)
+        
+        ax3.set_xlabel('Volume (m³)')
+        ax3.set_ylabel('Energy Density (J/m³)')
+        ax3.set_title('Energy Density vs Source Volume')
+        ax3.set_xscale('log')
+        ax3.grid(True, alpha=0.3)
+        
+        # 4. Feasibility Assessment
+        feasible = [self.results['sources'][s]['feasible'] for s in sources]
+        accessible = [self.results['sources'][s]['experimentally_accessible'] for s in sources]
+        
+        x_pos = np.arange(len(sources))
+        width = 0.35
+        
+        bars4a = ax4.bar(x_pos - width/2, feasible, width, label='Feasible', 
+                        color='lightblue', alpha=0.7)
+        bars4b = ax4.bar(x_pos + width/2, accessible, width, label='Experimentally Accessible',
+                        color='lightgreen', alpha=0.7)
+        
+        ax4.set_xlabel('Source')
+        ax4.set_ylabel('Assessment')
+        ax4.set_title('Feasibility Assessment')
+        ax4.set_xticks(x_pos)
+        ax4.set_xticklabels(sources)
+        ax4.set_ylim(0, 1.2)
+        ax4.legend()
+        ax4.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.show()
+        
+        print(f"Visualization saved to: {save_path}")
+
+def main():
+    """Main execution function."""
+    print("Vacuum-ANEC Integration Analysis")
+    print("=" * 40)
     
-    print(f"Best baseline approach: {best_baseline}")
-    print(f"Best optimized approach: {best_optimized}")
+    # Initialize integrator
+    integrator = VacuumANECIntegrator(temporal_scale=1e-6)  # Microsecond QI scale
     
-    best_flux = abs(results[best_optimized]['optimization']['achieved_flux'])
-    target_flux = 1e-25
-    gap = target_flux / best_flux if best_flux > 0 else np.inf
+    # Run comprehensive analysis
+    target_flux = 1e-25  # Target ANEC violation flux in W
+    results = integrator.run_comprehensive_analysis(target_flux)
     
-    print(f"Best achieved flux: {best_flux:.2e} W")
-    print(f"Gap to target: {gap:.2e}× improvement needed")
+    # Generate report
+    report_path = integrator.generate_report()
     
-    return results
+    # Create visualization
+    plot_path = integrator.create_visualization()
+    
+    # Summary
+    print("\n" + "="*50)
+    print("VACUUM-ANEC INTEGRATION SUMMARY")
+    print("="*50)
+    
+    if results['best_source']:
+        best = results['sources'][results['best_source']]
+        print(f"Best source: {results['best_source']}")
+        print(f"ANEC flux: {best['anec_flux']:.2e} W")
+        print(f"Target ratio: {best['target_ratio']:.2e}")
+        print(f"Source type: {best['source_type']}")
+        
+        if best['target_ratio'] > 1.0:
+            print("🎯 TARGET EXCEEDED - Experimentally viable!")
+        elif best['target_ratio'] > 0.1:
+            print("✅ Within order of magnitude - Promising approach")
+        else:
+            print("⚠️  Below target - Requires optimization")
+    else:
+        print("❌ No viable sources found for target flux")
+    
+    print(f"\nDetailed results: {report_path}")
+    print(f"Visualization: {plot_path}")
 
 if __name__ == "__main__":
-    try:
-        results = run_comprehensive_vacuum_anec_analysis()
-        print("\n✓ Comprehensive analysis completed!")
-        
-    except Exception as e:
-        print(f"\n✗ Analysis failed: {e}")
-        import traceback
-        traceback.print_exc()
+    main()
