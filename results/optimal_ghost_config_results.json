@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-06-07 21:12:43",
+  "optimal_parameters": {
+    "M": 1000.0,
+    "alpha": 0.01,
+    "beta": 0.1,
+    "expected_anec": -1.418400352905847e-12
+  },
+  "deployment_results": {
+    "anec_violation": -1.4184057257819395e-12,
+    "computation_time": 0.001024484634399414,
+    "relative_error": 3.787982766270865e-06,
+    "violation_confirmed": 

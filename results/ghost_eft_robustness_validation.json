@@ -1,0 +1,18 @@
+{
+  "validation_type": "parameter_robustness",
+  "optimal_config": {
+    "M": 1000.0,
+    "alpha": 0.01,
+    "beta": 0.1,
+    "target": -1.418e-12
+  },
+  "test_results": [
+    {
+      "config": 1,
+      "parameters": {
+        "M": 900,
+        "alpha": 0.009,
+        "beta": 0.09
+      },
+      "anec_value": -1.4184004258143516e-12,
+      "qi_violation": 

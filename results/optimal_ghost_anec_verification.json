@@ -1,0 +1,13 @@
+{
+  "discovery": "Discovery 21: Ghost/Phantom EFT Breakthrough",
+  "optimal_parameters": {
+    "M": 1000.0,
+    "alpha": 0.01,
+    "beta": 0.1,
+    "expected_anec": -1.418e-12
+  },
+  "computed_anec": -1.418400352905847e-12,
+  "accuracy_percent": 0.028233632288222774,
+  "computation_time": 0.0005085468292236328,
+  "validation": {
+    "qi_violation": 

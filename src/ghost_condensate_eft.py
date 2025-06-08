@@ -76,8 +76,7 @@ class GhostCondensateEFT:
         
         L = -X + alpha*X^2/M^4 - beta*phi^2
         :param M: mass-scale for X^2 term
-        :param alpha: dimensionless coeff of X^2
-        :param beta: mass^2 term in V(phi)=½β phi^2
+        :param alpha: dimensionless coeff of X^2        :param beta: mass^2 term in V(phi)=½β phi^2
         :param grid: 1D array of positions (for ANEC integration)
         :param params: GhostEFTParameters object (alternative interface)
         :param device: computation device
@@ -108,7 +107,7 @@ class GhostCondensateEFT:
             self.device = device
             self.params = None
             
-            logger.info(f"Ghost EFT initialized: M={M:.1e}, α={alpha}, β={beta:.1e}")
+            logger.info(f"Ghost EFT initialized: M={self.M:.1e}, α={self.alpha}, β={self.beta:.1e}")
             logger.info(f"Grid range: [{self.grid[0]:.1e}, {self.grid[-1]:.1e}] with {len(self.grid)} points")
     
     def _setup_coordinates(self):

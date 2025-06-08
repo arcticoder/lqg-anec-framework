@@ -1,6 +1,6 @@
 {
   "report_metadata": {
-    "generated_at": "2025-06-07 20:59:41 UTC",
+    "generated_at": "2025-06-07 21:16:30 UTC",
     "report_type": "Experimental Planning & Technology Comparison",
     "version": "1.0",
     "framework": "LQG-ANEC with Ghost EFT Integration"
@@ -135,7 +135,7 @@
           "total_combinations": 125,
           "successful_evaluations": 125,
           "violation_count": 125,
-          "scan_time_seconds": 0.050974369049072266,
+          "scan_time_seconds": 0.04103994369506836,
           "grid_points": 2000,
           "smearing_timescale": 604800
         },
