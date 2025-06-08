@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "timestamp": "20250607_205957",
+    "smearing_timescale_days": 7.0,
+    "target_anec_W": 1e-25,
+    "target_energy_density_J_m3": -1e-15,
+    "description": "Comprehensive vacuum source ANEC violation analysis"
+  },
+  "laboratory_sources": {
+    "casimir": {
+      "source_type": "CasimirArray",
+      "energy_density": 0.0,
+      "volume": 1e-12,
+      "total_energy": 0.0,
+      "anec_integral": 0.0,
+      "anec_ratio": 0.0,
+      "energy_ratio": 0.0,
+      "is_negative_energy": false,
+      "meets_anec_target": false,
+      "meets_energy_target": false,
+      "feasibility_score": 0.0,
+      "parameters": {
+        "n_layers": 10,
+        "spacing_range": [
+          1e-08,
+          1e-06
+        ],
+        "materials": [
+          "Au",
+          "SiO2",
+          "metamaterial"
+        ],
+        "volume": 1e-12,
+        "optimal_spacing": 1e-07
+      }
+    },
+    "dynamic": {
+      "source_type": "DynamicCasimirEffect",
+      "energy_density": -1.5791367041742973e+33,
+      "volume": 1e-09,
+      "total_energy": -1.5791367041742975e+24,
+      "anec_integral": -2.603957218241244e+18,
+      "anec_ratio": 2.603957218241244e+43,
+      "energy_ratio": 1.579136704174297e+48,
+      "is_negative_energy": true,
+      "meets_anec_target": true,
+      "meets_energy_target": true,
+      "feasibility_score": 4.112004419424349e+91,
+      "parameters": {
+        "drive_frequency": 20000000000.0,
+        "volume": 1e-09,
+        "quality_factor": 10000,
+        "power_budget": 0.001
+      }
+    },
+    "squeezed": {
+      "source_type": "SqueezedVacuumResonator",
+      "energy_density": 7.726062637696856e-11,
+      "volume": 7.853981633974482e-12,
+      "total_energy": 6.068035405940755e-22,
+      "anec_integral": 1.0006039726690339e-27,
+      "anec_ratio": 0.010006039726690338,
+      "energy_ratio": 77260.62637696856,
+      "is_negative_energy": false,
+      "meets_anec_target": false,
+      "meets_energy_target": true,
+      "feasibility_score": 773.0728968369268,
+      "parameters": {
+        "volume": 7.853981633974482e-12,
+        "squeezing_range": [
+          0.5,
+          3.0
+        ],
+        "stabilization_budget": 0.001,
+        "frequency_range": [
+          1000000000000.0,
+          1000000000000000.0
+        ]
+      }
+    }
+  },
+  "metamaterial_sources": {
+    "basic_negative_index": {
+      "source_type": "MetamaterialCasimir",
+      "energy_density": -3.6761630979825217e-06,
+      "volume": 1.5707963267948964e-18,
+      "total_energy": -5.7745034910098916e-24,
+      "anec_integral": -9.522012886805022e-30,
+      "anec_ratio": 9.522012886805022e-05,
+      "energy_ratio": 3676163097.9825215,
+      "amplification_factor": 5.301645387366448e-08,
+      "n_layers": 10,
+      "is_negative_energy": true,
+      "meets_anec_target": false,
+      "meets_energy_target": true,
+      "feasibility_score": 350044.72392986645
+    },
+    "alternating_layers": {
+      "source_type": "MetamaterialCasimir",
+      "energy_density": -0.0006948842352454746,
+      "volume": 1.8849555921538756e-18,
+      "total_energy": -1.3098259251255266e-21,
+      "anec_integral": -2.159870430061051e-27,
+      "anec_ratio": 0.02159870430061051,
+      "energy_ratio": 694884235245.4745,
+      "amplification_factor": 1.2987733390076628e-06,
+      "n_layers": 20,
+      "is_negative_energy": true,
+      "meets_anec_target": false,
+      "meets_energy_target": true,
+      "feasibility_score": 15008599120.222874
+    },
+    "optimized_stack": {
+      "source_type": "MetamaterialCasimir",
+      "energy_density": -0.0020753882942301832,
+      "volume": 2.356194490192345e-18,
+      "total_energy": -4.890018463874847e-21,
+      "anec_integral": -8.063519037129809e-27,
+      "anec_ratio": 0.08063519037129808,
+      "energy_ratio": 2075388294230.183,
+      "amplification_factor": 1.8706618293027777e-06,
+      "n_layers": 30,
+      "is_negative_energy": true,
+      "meets_anec_target": false,
+      "meets_energy_target": true,
+      "feasibility_score": 167349330199.6144
+    }
+  }
+}

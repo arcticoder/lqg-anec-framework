@@ -3,7 +3,7 @@
     "total_combinations": 125,
     "successful_evaluations": 125,
     "violation_count": 125,
-    "scan_time_seconds": 0.04216814041137695,
+    "scan_time_seconds": 0.050974369049072266,
     "grid_points": 2000,
     "smearing_timescale": 604800
   },
