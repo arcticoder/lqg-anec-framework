@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../warp-bubble-optimizer"
+		},
+		{
+			"path": "../warp-bubble-qft"
 		}
 	],
 	"settings": {}
