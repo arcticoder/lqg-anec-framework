@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../warp-bubble-qft"
+		},
+		{
+			"path": "../unified-lqg"
 		}
 	],
 	"settings": {
