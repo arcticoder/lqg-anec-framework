@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../unified-lqg"
+		},
+		{
+			"path": "../warp-bubble-mvp-simulator"
 		}
 	],
 	"settings": {
