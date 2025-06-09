@@ -10,5 +10,7 @@
 			"path": "../warp-bubble-qft"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"powershell.cwd": "warp-bubble-optimizer"
+	}
 }
