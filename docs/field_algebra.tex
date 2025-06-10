@@ -26,6 +26,13 @@ K_\varphi &\rightarrow \frac{\sin(\mu K_\varphi)}{\mu} \\
 
 where $\mu$ is the polymer scale parameter and $K_x, K_\varphi$ are the extrinsic curvature components in spherical symmetry.
 
+Analogously, for matter fields, we implement the substitution rule:
+\begin{equation}
+\pi_i \mapsto \frac{\sin(\mu \pi_i)}{\mu}
+\end{equation}
+
+This extension of holonomy substitutions to matter fields maintains the fundamental LQG quantization philosophy while enabling matter creation through curvature-matter coupling.
+
 \section{Matter Field Substitutions}
 
 \subsection{Scalar Field Polymer Quantization}
@@ -67,6 +74,39 @@ The proof involves careful small-$\mu$ expansion:
 \end{align}
 
 The leading correction terms cancel in the commutator calculation, preserving the canonical structure.
+
+\subsection{Matter Field Polymer Substitution}
+
+For matter fields in the polymer-quantized regime, the canonical momentum undergoes the substitution:
+\begin{equation}
+\pi_i \mapsto \frac{\sin(\mu \pi_i)}{\mu}
+\end{equation}
+
+where $\mu$ is the polymer scale parameter. This substitution reflects the discrete quantum geometry underlying loop quantum gravity and modifies the kinetic energy contribution to the matter Hamiltonian.
+
+\subsection{Integrated Matter-Curvature Hamiltonian}
+
+The complete Hamiltonian including curvature-matter coupling becomes:
+\begin{equation}
+H_{\text{total}} = H_{\text{geometry}} + H_{\text{matter}}^{\text{polymer}} + H_{\text{interaction}}
+\end{equation}
+
+where:
+\begin{align}
+H_{\text{matter}}^{\text{polymer}} &= \int \left[ \pi^2 \text{sinc}^2(\mu \pi) + (\nabla \phi)^2 + m^2 \phi^2 \right] d^3r \\
+H_{\text{interaction}} &= \lambda \int \sqrt{f} R \phi^2 d^3r
+\end{align}
+
+This integrated formulation enables direct computation of matter creation rates through the coupling term while maintaining consistency with polymer quantization principles.
+
+\subsection{Matter Creation Rate Formula}
+
+The fundamental matter creation rate emerges from the interaction Hamiltonian:
+\begin{equation}
+\dot{n}(t) = 2\lambda \sum_i R_i(t) \phi_i(t) \pi_i(t)
+\end{equation}
+
+where the discrete sum represents spatial integration over the computational grid. This formula directly connects spacetime curvature ($R_i$) with matter field dynamics ($\phi_i, \pi_i$) to produce net particle creation.
 
 \section{Integration with ANEC Violations}
 
