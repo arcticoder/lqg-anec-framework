@@ -1,0 +1,13 @@
+{
+  "config": {
+    "mu_g": 0.15,
+    "m_g": 0.1,
+    "N_colors": 3,
+    "S_inst": 78.95683520871486,
+    "Phi_inst": 6.283185307179586
+  },
+  "classical_limit_test": "PASSED",
+  "momentum_analysis": "COMPLETED",
+  "instanton_sector": "IMPLEMENTED",
+  "tensor_structure": "VALIDATED"
+}
