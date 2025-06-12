@@ -1,0 +1,20 @@
+{
+  "tests_run": 16,
+  "tests_passed": 13,
+  "tests_failed": 3,
+  "failures": [
+    {
+      "test": "test_uq_parameter_correlations (__main__.TestInstantonUQValidation.test_uq_parameter_correlations)",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\echo_\\Code\\asciimath\\lqg-anec-framework\\platinum_road_testing_framework.py\", line 441, in test_uq_parameter_correlations\n    results = instanton_uq_mapping((0.1, 1.0), n_phi=5, n_mc=20)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: instanton_uq_mapping() got an unexpected keyword argument 'n_mc'\n"
+    },
+    {
+      "test": "test_parameter_sweep_scaling (__main__.TestPerformanceBenchmarks.test_parameter_sweep_scaling)",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\echo_\\Code\\asciimath\\lqg-anec-framework\\platinum_road_testing_framework.py\", line 558, in test_parameter_sweep_scaling\n    points_per_second = len(results) / execution_time\n                        ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~\nZeroDivisionError: float division by zero\n"
+    },
+    {
+      "test": "test_error_propagation (__main__.TestPipelineIntegration.test_error_propagation)",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\echo_\\Code\\asciimath\\lqg-anec-framework\\platinum_road_testing_framework.py\", line 609, in test_error_propagation\n    with self.assertRaises((ValueError, TypeError, ZeroDivisionError)):\nAssertionError: (<class 'ValueError'>, <class 'TypeError'>, <class 'ZeroDivisionError'>) not raised\n"
+    }
+  ],
+  "execution_time": 0.023771286010742188
+}

@@ -1,0 +1,12 @@
+{
+  "tests_run": 8,
+  "tests_passed": 7,
+  "tests_failed": 1,
+  "failures": [
+    {
+      "test": "test_propagator_basic_functionality (__main__.TestPlatinumRoadDeliverables.test_propagator_basic_functionality)",
+      "error": "Traceback (most recent call last):\n  File \"C:\\Users\\echo_\\Code\\asciimath\\lqg-anec-framework\\platinum_road_testing_framework_fixed.py\", line 108, in test_propagator_basic_functionality\n    self.assertEqual(D.shape, (4, 4), \"Propagator should be 4x4 matrix\")\nAssertionError: Tuples differ: (3, 3, 4, 4) != (4, 4)\n\nFirst differing element 0:\n3\n4\n\nFirst tuple contains 2 additional elements.\nFirst extra element 2:\n4\n\n- (3, 3, 4, 4)\n+ (4, 4) : Propagator should be 4x4 matrix\n"
+    }
+  ],
+  "execution_time": 0.008393287658691406
+}
