@@ -837,19 +837,19 @@
     "optimal_phi": 0.5
   },
   "uncertainty_quantification": {
-    "propagator_mean": -1.1405169812037919,
-    "propagator_std": 0.004768273402573986,
+    "propagator_mean": -1.1403190386461797,
+    "propagator_std": 0.004495673081268754,
     "propagator_95_ci": [
-      -1.1490950675374856,
-      -1.1300462260576292
+      -1.1490697491755373,
+      -1.131682619467527
     ],
-    "instanton_mean": 3.34515252862173e-179,
+    "instanton_mean": 4.3433691147040375e-177,
     "instanton_std": 0.0,
     "instanton_95_ci": [
-      3.348011651751222e-191,
-      3.452905932697398e-179
+      3.555746699246762e-191,
+      3.365127691418071e-180
     ],
-    "total_uncertainty": 0.004768273402573986
+    "total_uncertainty": 0.004495673081268754
   },
   "spin_foam_evolution": {
     "times": [
