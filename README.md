@@ -281,16 +281,3 @@ Breakthrough analysis runs demonstrate:
 ## Contributors
 
 [Add contributor information]
-
-## Citation
-
-If you use this framework in your research, please cite:
-
-```
-@software{lqg_anec_framework,
-  title={LQG-ANEC Framework: Comprehensive ANEC Violation Analysis},
-  author={[Author Names]},
-  year={2025},
-  url={[Repository URL]}
-}
-```
