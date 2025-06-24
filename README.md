@@ -1,6 +1,6 @@
 # LQG-ANEC Framework
 
-A comprehensive framework for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings.
+A framework for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings.
 
 ## Overview
 
@@ -65,7 +65,7 @@ Compare LQG results with warp bubble analysis:
 python run_lqg_anec_analysis.py --analysis-type warp --save-plots
 ```
 
-#### 5. Comprehensive Analysis
+#### 5. Analysis
 Run all analysis types in sequence:
 ```bash
 python run_lqg_anec_analysis.py --analysis-type full --output-dir results_comprehensive --save-plots
@@ -173,7 +173,7 @@ results/
 ### Result Files
 
 Each analysis generates:
-- **JSON Summary**: Complete numerical results and parameters
+- **JSON Summary**: Numerical results and parameters
 - **Plots**: Visualization of parameter scans and violation regions (PNG format)
 - **Analysis Metadata**: Timestamps, parameter values, and computation details
 
@@ -194,7 +194,7 @@ Each analysis generates:
 
 ## Theoretical Background
 
-This framework implements state-of-the-art methods for studying ANEC violations:
+This framework implements methods for studying ANEC violations:
 
 1. **Loop Quantum Gravity**: Uses polymer quantization and discrete geometric structures
 2. **Coherent State Methods**: Semiclassical states that capture both quantum and classical effects
@@ -231,24 +231,24 @@ python run_lqg_anec_analysis.py --analysis-type single --mu 0.1 --tau 1.0
 - `networkx`: Graph structures for spin networks
 - `argparse`: Command-line interface
 
-## Major Breakthrough Discoveries (June 2025)
+## Analysis Results (June 2025)
 
-🚀 **MISSION COMPLETE**: The LQG-ANEC Framework has achieved revolutionary breakthroughs in quantum inequality circumvention:
+The LQG-ANEC Framework has produced computational validation of quantum inequality analysis:
 
-### Computational Achievements
-- **167+ Million QI Violations**: Largest-scale computational validation of quantum inequality circumvention
-- **61.4% GPU Utilization**: Peak performance in memory-efficient quantum field analysis
-- **Week-Scale Negative Energy**: Target 10⁻²⁵ W flux demonstrated as theoretically achievable
+### Computational Results
+- **167+ Million QI Violations**: Large-scale computational validation of quantum inequality analysis
+- **61.4% GPU Utilization**: Performance in memory-efficient quantum field analysis
+- **Week-Scale Negative Energy**: Target 10⁻²⁵ W flux demonstrated as theoretically feasible
 - **Multiple Field Configurations**: Three validated dispersion relations with 75.4% violation rates
 
-### Theoretical Breakthroughs
-- **Polymer-Enhanced Field Theory**: Complete mathematical framework with week-scale modulation
-- **Five QI Kernel Validation**: Comprehensive methodology across different sampling approaches  
-- **Ghost Scalar EFT**: UV-complete negative energy framework with 100% violation rates
+### Theoretical Results
+- **Polymer-Enhanced Field Theory**: Mathematical framework with week-scale modulation
+- **Five QI Kernel Validation**: Methodology across different sampling approaches  
+- **Ghost Scalar EFT**: UV-finite negative energy framework with 100% violation rates
 - **Systematic ANEC Violation**: Minimum values reaching -3.58 × 10⁵ confirmed
 
 ### Documentation
-📚 **Complete Technical Documentation**: See `docs/key_discoveries.tex` for full mathematical details of all breakthrough discoveries and `docs/computational_breakthrough_summary.tex` for performance analysis.
+Technical Documentation: See `docs/key_discoveries.tex` for mathematical details and `docs/computational_breakthrough_summary.tex` for performance analysis.
 
 ## Framework Capabilities
 
@@ -263,20 +263,20 @@ The framework has been successfully validated with the following capabilities:
 ✅ **GPU-optimized QI analysis**: Large-scale quantum inequality violation detection  
 ✅ **Week-scale temporal sampling**: Extended integration for sustained negative energy analysis
 
-### Validated Example Output
+### Example Output
 
-Breakthrough analysis runs demonstrate:
+Analysis runs demonstrate:
 - **167M+ QI violations** detected in large-scale computational sweeps
 - **Week-scale negative energy flux** confirmed at target 10⁻²⁵ W levels
 - **Three field configurations** with validated 75.4% violation rates  
-- **UV-complete ghost scalar EFT** with controlled negative energy generation
+- **UV-finite ghost scalar EFT** with controlled negative energy generation
 - **Parameter optimization** across five different quantum inequality sampling kernels
 - **GPU performance** reaching 61.4% utilization in memory-efficient operation
 - All results systematically documented in structured file hierarchy
 
 ## License
 
-[Add appropriate license information]
+The Unlicense
 
 ## Contributors
 
