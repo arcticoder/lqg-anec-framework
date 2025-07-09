@@ -1,5 +1,15 @@
 # LQG-ANEC Framework
 
+## Related Repositories
+
+- [energy](https://github.com/arcticoder/energy): Central meta-repo for all energy, quantum, and LQG research. This ANEC framework is integrated for energy condition analysis.
+- [lqg-cosmological-constant-predictor](https://github.com/arcticoder/lqg-cosmological-constant-predictor): Shares theoretical and simulation infrastructure for LQG and cosmological analysis.
+- [unified-lqg](https://github.com/arcticoder/unified-lqg): Provides core LQG framework for coherent states and spin network formulations.
+- [warp-bubble-qft](https://github.com/arcticoder/warp-bubble-qft): Related for negative energy requirements and warp bubble stability analysis.
+- [negative-energy-generator](https://github.com/arcticoder/negative-energy-generator): Shares ANEC violation analysis for negative energy generation applications.
+
+All repositories are part of the [arcticoder](https://github.com/arcticoder) ecosystem and link back to the energy framework for unified documentation and integration.
+
 A framework for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings.
 
 ## Overview
