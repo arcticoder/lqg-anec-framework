@@ -233,13 +233,26 @@ Run basic functionality tests:
 python run_lqg_anec_analysis.py --analysis-type single --mu 0.1 --tau 1.0
 ```
 
-### Dependencies
+## Verification & Validation  
+  
+### Metric generation for billiard-ball–size warp bubble  
+  
+This V&V task (tracked in `VnV-TODO.ndson:1`) ensures that the warp-bubble metric builder implements the analytic soliton profile correctly README:  
+  
+- [`scripts/gen_reference_soliton.py`](scripts/gen_reference_soliton.py): generates an independent reference file `tests/reference_soliton.json` by evaluating
 
-- `numpy`: Numerical computations
-- `scipy`: Scientific computing and integration
-- `matplotlib`: Plotting and visualization
-- `networkx`: Graph structures for spin networks
-- `argparse`: Command-line interface
+```math
+    f(r)=c_0 + a\tanh\bigl[b,(r-x_0)\bigr]
+```
+at r=0
+
+- [`tests/reference_soliton.json`](tests/reference_soliton.json): “golden” dataset mapping `(a,b,x0,c0)` tuples to expected values.  
+- [`tests/test_metric_generation.py`](tests/test_metric_generation.py): loads the golden dataset, prints
+
+    `=== Soliton Ansatz vs Reference Dataset ===`
+
+    followed by each `key: result, expected`, and asserts the symbolic `soliton_ansatz` at `r=0` matches the reference within a relative tolerance of $10^{-8}$.  
+- **CI workflow**: runs this test suite on every push via `.github/workflows/metric-generation.yml`.
 
 ## Analysis Results (June 2025)
 

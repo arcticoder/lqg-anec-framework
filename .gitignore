@@ -1,6 +1,20 @@
 /src/__pycache__/*
 *.pyc
 __pycache__/
-.github/instructions/copilot-instructions.md
 
-.github/
+# — pytest, pip and general Python ignores
+*.egg-info/
+build/
+dist/
+__pycache__/
+*.py[cod]
+.vscode/
+*.swp
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

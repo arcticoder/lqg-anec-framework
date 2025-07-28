@@ -1,0 +1,26 @@
+name: "Metric Ansatz Generation vs Reference Dataset"
+
+on:
+  push:
+    paths:
+      - 'src/metric_ansatz_development.py'
+      - 'tests/reference_soliton.json'
+      - 'tests/test_metric_generation.py'
+  workflow_dispatch: {}
+
+jobs:
+  metric_ansatz:
+    name: "Verify Soliton Ansatz vs Reference"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install pytest
+      - name: Run soliton ansatz tests
+        run: pytest tests/test_metric_generation.py -vv -s
