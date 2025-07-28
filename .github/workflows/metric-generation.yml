@@ -22,5 +22,6 @@ jobs:
         run: |
           pip install -e .
           pip install pytest
+          pip install scipy
       - name: Run soliton ansatz tests
         run: pytest tests/test_metric_generation.py -vv -s
