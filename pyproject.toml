@@ -19,4 +19,4 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["lqg_anec_framework*"]
+include = ["energy-optimization*"]
