@@ -1,4 +1,4 @@
-# LQG-ANEC Framework
+# LQG-ANEC Framework (research-stage)
 
 ## Related Repositories
 
@@ -10,7 +10,7 @@
 
 All repositories are part of the [arcticoder](https://github.com/arcticoder) ecosystem and link back to the energy framework for unified documentation and integration.
 
-A framework for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings.
+This repository provides research-stage tools for exploring Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings. Results presented here are model-derived and intended for research and reproducibility; they require independent validation and V&V before any operational interpretation.
 
 ## Overview
 
@@ -25,7 +25,7 @@ This framework integrates multiple theoretical approaches to study ANEC violatio
 - **Script-based Analysis**: All computations run via Python scripts (no Jupyter notebooks)
 - **CLI Interface**: Command-line driven workflows with flexible parameter scanning
 - **Multiple Analysis Types**: Single-point, parameter scans, EFT analysis, and warp bubble comparisons
-- **Automated Reporting**: Results saved to JSON files with optional plot generation
+-- **Automated Reporting (research-stage)**: Results saved to JSON files with optional plot generation. Reported metrics should be interpreted as outputs of the implemented analyses and are subject to the assumptions and parameter choices documented in `docs/`.
 - **Modular Architecture**: Extensible framework for adding new analysis methods
 
 ## Installation
@@ -135,11 +135,11 @@ main()
 
 ## Key Results
 
-The framework enables computation of:
-- Polymer-modified quantum inequality bounds
-- Time-dependent T^-4 smearing effects
-- ANEC violations in discrete quantum geometry
-- Backreaction effects in warp-drive geometries
+Reported / provisional computational results (see `docs/` for methods, raw artifacts, and UQ plans):
+- Polymer-modified quantum inequality (QI) estimates (model outputs)
+- Observed T^-4-like smearing effects in selected parameterizations
+- Indications of ANEC violation regions within the discrete-geometry model assumptions
+- Preliminary backreaction estimates for simplified warp configurations
 
 ## Framework Architecture
 
@@ -258,11 +258,12 @@ at r=0
 
 The LQG-ANEC Framework has produced computational validation of quantum inequality analysis:
 
-### Computational Results
-- **167+ Million QI Violations**: Large-scale computational validation of quantum inequality analysis
-- **61.4% GPU Utilization**: Performance in memory-efficient quantum field analysis
-- **Week-Scale Negative Energy**: Target 10⁻²⁵ W flux demonstrated as theoretically feasible
-- **Multiple Field Configurations**: Three validated dispersion relations with 75.4% violation rates
+
+### Computational Results (reported / model-derived)
+- **Large-scale sweep outcomes**: Model sweeps produced many candidate QI-violation events under the chosen parameter ranges; counts are sensitive to sampling strategy and post-processing filters (see `docs/` and `artifacts/`).
+- **Performance metrics**: GPU utilization figures reflect the hardware and runtime configuration used in experiments; treat them as reproducibility notes rather than fixed performance guarantees.
+- **Sustained negative-energy scenarios**: Some model configurations produce prolonged negative-energy flux in simulations; these are theoretical outputs that require rigorous physical interpretation and independent verification.
+- **Field-configuration sensitivity**: Violation rates vary strongly with model choices and numerical tolerances; see `docs/UQ-TODO.ndjson` for recommended sensitivity analyses.
 
 ### Theoretical Results
 - **Polymer-Enhanced Field Theory**: Mathematical framework with week-scale modulation
@@ -273,18 +274,25 @@ The LQG-ANEC Framework has produced computational validation of quantum inequali
 ### Documentation
 Technical Documentation: See `docs/key_discoveries.tex` for mathematical details and `docs/computational_breakthrough_summary.tex` for performance analysis.
 
-## Framework Capabilities
+## Framework Capabilities (research-stage / validated on test data)
 
-The framework has been successfully validated with the following capabilities:
+The repository implements analysis routines for the following research tasks. Where capabilities are listed, they indicate implemented features and test-scale validation; they are not guarantees of operational performance.
 
-✅ **Single-point ANEC analysis**: Computes classical and quantum-corrected ANEC integrals  
-✅ **Parameter space scanning**: Maps violation regions across μ-τ parameter space  
-✅ **EFT analysis**: Incorporates higher-order curvature corrections  
-✅ **Warp bubble integration**: Compares LQG results with negative energy requirements  
-✅ **Automated reporting**: Saves results to JSON and generates plots  
-✅ **Polymer scale hierarchy**: Covers phenomenological to Planck scale physics  
-✅ **GPU-optimized QI analysis**: Large-scale quantum inequality violation detection  
-✅ **Week-scale temporal sampling**: Extended integration for sustained negative energy analysis
+- **Single-point ANEC analysis**: Computes classical and quantum-corrected ANEC integrals for configured parameter sets. Validate with `tests/` and analytic checks before relying on outputs.
+- **Parameter space scanning**: Supports parameter sweeps and result aggregation. Interpret maps as exploratory guides; attach uncertainty summaries for any claim derived from them.
+- **EFT analysis**: Tools for incorporating higher-order curvature corrections; document assumptions in `docs/` for each run.
+- **Warp bubble comparison**: Utilities to compare simplified warp metrics with LQG outputs; these comparisons are conceptual and require domain review for physical claims.
+- **Automated reporting**: Saves structured JSON artifacts and plotting scripts to `results/` or `artifacts/`; include seeds and environment metadata to reproduce runs.
+- **Polymer scale exploration**: Enables sweeps across polymer scales; link any phenomenological claims to UQ artifacts.
+- **GPU-optimized workflows**: Experimental GPU acceleration paths included; profile and validate on your hardware.
+- **Extended temporal sampling**: Supports long-duration integration for research experiments; results should include sensitivity checks and convergence diagnostics.
+## Scope / Validation & Limitations
+
+- **Maturity**: Research-stage code and analyses. Results are provisional and depend on model choices, numerical tolerances, and sampling strategies.
+- **Reproducibility**: To reproduce reported outputs, run the scripts with the specified seeds and environment details; raw artifacts and run metadata should be published alongside any claim.
+- **Uncertainty Quantification**: Add sensitivity sweeps and bootstrap/resampling where possible; consult `docs/UQ-TODO.ndjson` for suggested tasks.
+- **Independent review**: Any claim with operational or physical implications should be reviewed by domain experts and accompanied by V&V artifacts.
+- **Safety & communications**: Avoid presenting simulation outputs as operational capabilities in public summaries; use conservative phrasing and include limitations.
 
 ### Example Output
 
