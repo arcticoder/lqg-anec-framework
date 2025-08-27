@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `lqg-anec-framework` repository provides a comprehensive theoretical and computational framework for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings. This framework integrates multiple quantum gravity approaches to study negative energy phenomena, with particular emphasis on warp bubble physics and exotic matter requirements.
+The `lqg-anec-framework` repository provides a research-stage theoretical and computational framework for exploring Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity (LQG) and related quantum field theory settings. This framework integrates multiple quantum gravity approaches to study negative-energy phenomena; results are preliminary and model- and parameter-dependent. Quantitative claims should be interpreted in the context of the assumptions and parameter ranges described below.
 
 ## Theoretical Foundation
 
@@ -19,7 +19,7 @@ Where:
 - k^μ is the null tangent vector to the geodesic
 - λ is an affine parameter along the geodesic
 
-ANEC violations (negative integrals) are crucial for exotic phenomena like warp drives and traversable wormholes.
+ANEC violations (negative integrals) have been discussed as an ingredient in some theoretical constructions for exotic phenomena such as warp drives and traversable wormholes. Whether such violations can be realized in physically relevant regimes depends sensitively on model choices, parameter values, and uncertainty in numerical approximations; the results presented here are not a demonstration of practical engineering feasibility.
 
 ### Loop Quantum Gravity Framework
 
@@ -163,7 +163,7 @@ def eft_anec_analysis(n_nodes, coupling_constants):
 ```
 
 #### 4. Warp Bubble Comparison
-Compare LQG results with classical warp bubble requirements:
+Compare LQG results with classical warp bubble requirements. The comparisons below are intended as a conceptual mapping between computed ANEC integrals and classical requirement estimates; they do not constitute a demonstration that a warp drive is practically achievable.
 
 ```python
 def warp_bubble_comparison():
@@ -181,13 +181,14 @@ def warp_bubble_comparison():
         warp_requirements['required_violation']
     )
     
+    # Note: feasibility here is a model-based indicator, not an assertion of practical feasibility
     feasibility = violation_ratio >= 1.0
     
     return {
         'lqg_violation': lqg_result['anec_violation'],
         'warp_requirement': warp_requirements['required_violation'],
         'violation_ratio': violation_ratio,
-        'warp_feasible': feasibility,
+        'warp_feasible_model_indicator': feasibility,
         'energy_scale': warp_requirements['energy_scale']
     }
 ```
@@ -398,10 +399,10 @@ def classify_anec_violation(anec_value):
         return "strong_violation"
 ```
 
-#### Physical Interpretation
-- **Weak violations** (|ANEC| < 10⁻⁶): Quantum corrections to classical physics
-- **Moderate violations** (10⁻⁶ < |ANEC| < 10⁻³): Potentially observable effects
-- **Strong violations** (|ANEC| > 10⁻³): Exotic matter regimes
+### Physical Interpretation
+- **Weak violations** (|ANEC| < 10⁻⁶): Indicate small quantum corrections relative to classical predictions; interpret with uncertainty estimates.
+- **Moderate violations** (10⁻⁶ < |ANEC| < 10⁻³): May indicate parameter regimes where quantum effects are amplified; significance depends on numerical convergence and sensitivity analyses.
+- **Strong violations** (|ANEC| > 10⁻³): Correspond to parameter regimes where the model indicates large departures from classical energy conditions; such regimes typically require careful scrutiny of approximations and stability.
 
 ### Parameter Optimization
 
@@ -427,6 +428,15 @@ def find_optimal_violation_parameters(scan_results):
         'optimal_tau': optimal_region['tau_range'],
         'violation_density': optimal_region['density']
     }
+
+
+## Scope, Validation & Limitations
+
+- **Research-stage results:** The computations and examples in this repository are exploratory. Numerical values reported are sensitive to discretization choices, parameter ranges, and implementation details.
+- **Uncertainty quantification (UQ):** Where possible, include confidence intervals, convergence tests, and sensitivity analyses alongside reported numbers. See `docs/` for example scripts that generate raw artifacts and basic UQ summaries.
+- **Reproducibility:** Results should be reproducible using the scripts under `scripts/` and the configuration files in `examples/`; maintainers should attach raw output (CSV/JSON) and environment details when reporting numeric claims.
+- **Physical feasibility:** Mapping from model outputs to physical feasibility (e.g., for warp drives) is non-trivial and requires energy-scale comparisons, stability analyses, and domain-level review. This repository provides model indicators, not engineering validation.
+
 ```
 
 ### Warp Drive Feasibility Assessment
