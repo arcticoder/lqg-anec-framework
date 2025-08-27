@@ -266,10 +266,10 @@ The LQG-ANEC Framework has produced computational validation of quantum inequali
 - **Field-configuration sensitivity**: Violation rates vary strongly with model choices and numerical tolerances; see `docs/UQ-TODO.ndjson` for recommended sensitivity analyses.
 
 ### Theoretical Results
-- **Polymer-Enhanced Field Theory**: Mathematical framework with week-scale modulation
-- **Five QI Kernel Validation**: Methodology across different sampling approaches  
-- **Ghost Scalar EFT**: UV-finite negative energy framework with 100% violation rates
-- **Systematic ANEC Violation**: Minimum values reaching -3.58 × 10⁵ confirmed
+- **Polymer-Enhanced Field Theory (model-derived):** Mathematical framework with week-scale modulation. Results are contingent on approximation choices and numerical methods; document assumptions and limitations in `docs/`.
+- **Five QI Kernel Validation (methodology):** Validation methodology for different sampling approaches; include convergence tests and reproduce kernels in `docs/` when publishing claims.
+- **Ghost Scalar EFT (theoretical observation):** Reported UV-finite negative-energy behavior is a model-derived observation. Verify analytically and numerically and include limitations and parameter-dependence in accompanying documentation.
+- **Systematic ANEC Violation (provisional numbers):** Previously reported extreme numerical values are model outputs sensitive to discretization and sampling; provide raw artifacts, parameter sweeps, and uncertainty quantification before drawing physical conclusions.
 
 ### Documentation
 Technical Documentation: See `docs/key_discoveries.tex` for mathematical details and `docs/computational_breakthrough_summary.tex` for performance analysis.
@@ -296,14 +296,12 @@ The repository implements analysis routines for the following research tasks. Wh
 
 ### Example Output
 
-Analysis runs demonstrate:
-- **167M+ QI violations** detected in large-scale computational sweeps
-- **Week-scale negative energy flux** confirmed at target 10⁻²⁵ W levels
-- **Three field configurations** with validated 75.4% violation rates  
-- **UV-finite ghost scalar EFT** with controlled negative energy generation
-- **Parameter optimization** across five different quantum inequality sampling kernels
-- **GPU performance** reaching 61.4% utilization in memory-efficient operation
-- All results systematically documented in structured file hierarchy
+Representative analysis outputs (model/simulation artifacts) — interpret with caution and publish reproducibility artifacts alongside:
+- **Counts of candidate QI-violation events:** Large counts can appear in parameter sweeps; these counts depend strongly on sampling and filtering choices. When reporting counts, publish the raw data, filtering scripts, and parameter settings.
+- **Reported negative-energy flux cases:** Some simulations show prolonged negative-energy flux under certain model assumptions; these are theoretical outputs and require independent verification and physical interpretation by domain experts.
+- **Field-configuration sensitivity:** Violation rates vary with model choices and numerical tolerances; include sensitivity analyses and CI-like summaries in `docs/`.
+- **Performance & profiling:** GPU utilization and other profiling numbers are reproducibility notes tied to specific hardware and runtime configurations.
+- **Repro artifacts:** Provide a short reproducible script/notebook and raw artifacts (seeds, environment, parameter files) that reproduce a representative result.
 
 ## License
 
